@@ -34,6 +34,8 @@ function initialize() {
    // Listen for the event fired when the user selects a prediction and retrieve
    // more details for that place.
    searchBox.addListener('places_changed', function(){
+	   
+	   deleteMarkers();
       var places= searchBox.getPlaces();
       
       if(places.length==0){
@@ -58,7 +60,6 @@ function initialize() {
            icon: icon,
            title: place.name,
            position: place.geometry.location
-           
          }));
 
          if (place.geometry.viewport) {
@@ -116,25 +117,61 @@ function moveToPlace(){
           },
          dataType: 'json',
              success : function(data){
-                
-               console.log(data);
-             
-               /*stateDisplay();*/
-               
-             var div;
-              var templateSource = $("#boardTrTemplate").html();
-              var template = Handlebars.compile(templateSource);
-              div = template(data);
-              $("#addTr").children().remove();  
-              $("#addTr").append(div).hide().show( "slide", {direction: "left" }, 1000 );
+            	 $("#owl-demo").remove();
+            	 $(".memberTable").after("<div id='owl-demo' style='position: absolute;' class='owl-ca'></div>");
+            	 Handlebars.registerHelper('imgTag', function(stoImgName, traceNo) {
+ 	       			console.log("스토어이미지네임");
+ 	       			console.log(stoImgName);
+ 	       			console.log(traceNo);
+ 	       			var imgName = [];
+ 	       			imgName = stoImgName.split(",");
+ 	       			var imgTag='';
+ 	       	     	if(imgName.length == 1){
+ 	       				imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"'></div>";
+ 	       			}
+ 	       	     	
+ 	       	     	else if(imgName.length >= 2){
+ 	       	     		
+ 	       				imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);'></div>";
+ 	       				imgTag += "<div class='count' style='position:absolute; top:15px; right:130%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>";
+ 	       	     	
+ 	       	     	}
+ 	       			
+ 	       			return imgTag;
+ 	       			
+ 	       		});
+ 	       	  
+         	  var div;
+               var templateSource = $("#boardTrTemplate").html();
+               var template = Handlebars.compile(templateSource);
+               div = template(data);
+               //$("#owl-demo").children().empty(); 
+               $("#owl-demo").append(div);
+               	 
+               var owl = $("#owl-demo")
+             	  owl.owlCarousel({
+             	     
+             		 items : 9,
+             	     /*itemsDesktop : [1199,3],
+             	     itemsDesktopSmall : [979,3],*/
+             	      
+             	    navigation:false,
+             	    pagination:false
+             	  });
               
               
-             var div;
+              var divs;
               var templateSource = $("#boardTrTemplate2").html();
               var template = Handlebars.compile(templateSource);
-              div = template(data);
+              divs = template(data);
               $("#members").children().remove();  
-              $("#members").append(div).hide().show( "slide", {direction: "left" }, 1000 );
+              $("#members").append(divs).hide().show( "slide", {direction: "left" }, 1000 );
+              
+              console.log("ss"+$.jStorage.get("latitude"));
+              console.log("dd"+$.jStorage.get("longtitude"));
+              
+              var newlalng = new google.maps.LatLng($.jStorage.get("latitude"),$.jStorage.get("longtitude"));
+              $("h3").attr("value",newlalng);
               
               for(i=0 ; i<data.list.length ; i++){
                   if(data.list[i].member.memberId == keywordNos){
@@ -515,18 +552,74 @@ $(document).on("click",".fa-user-times",function (){
 $(document).on("click",".details",function(){
    var traceNo = $(this).parent().find(".traceNo").val();
    var addr = $(this).parent().find(".addr").val();
+   var owl = $(this);
    console.log("traceNo"+traceNo);
    
    $.getJSON('/trace/selectmapList/'+traceNo, function(data){
       console.log(data.list[0].latitude);
        console.log(data);
        console.log(data.list[0].longtitude);
+       $("#owl-demo").remove();
+       $(".memberTable").after("<div id='owl-demo' style='position: absolute;' class='owl-ca'></div>");
+       /*moveToselect(data);*/
+       Handlebars.registerHelper('imgTagBottom', function(stoImgName, traceNo) {
+   			console.log("스토어이미지네임찍히는것인가?");
+   			console.log(stoImgName);
+   			console.log(traceNo);
+   			var imgName = [];
+   			imgName = stoImgName.split(",");
+   			var imgTag='';
+   	     	for(var i=0 ; i<imgName.length ; i++){
+   	     		imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[i]+"' alt='Owl Image' value='"+traceNo+"'></div>";
+   	     	}
+   			
+   			return imgTag;
+   			
+   		});
        
-       moveToselect(data);
+       var div;
+       var templateSource = $("#boardTrTemplateBottom").html();
+       var template = Handlebars.compile(templateSource);
+       div = template(data);
+        
+       $("#owl-demo").append(div);
+       
+       //var owl = $("#owl-demo")
+       /*var owlBottom = owl.parents(".wrapper").find(".owl-carousel").attr("id");
+       console.log($(this))
+       console.log("sfsf"+owlBottom);*/
+   	  //$("#"+owlBottom)
+       //var owlBottom = $(".owl-ca");
+       $("#owl-demo").owlCarousel({
+   	     
+   		 items : 9,
+   	     /*itemsDesktop : [1199,3],
+   	     itemsDesktopSmall : [979,3],*/
+   	      
+   	    navigation:false,
+   	    pagination:false
+   	  });
+      
+      
+      var latlng = new google.maps.LatLng(data.list[0].latitude, data.list[0].longtitude);
+      map.setCenter(latlng);
+      
+      
+       var suIcon = new google.maps.MarkerImage("/images/maker2.png", null, null, null, new google.maps.Size(30,40));
+
+       for(var i=0; i<markers.length; i++){
+           if(markers[i].id == data.list[0].traceNo){
+              for(var j=0; j<markers.length; j++){
+                 markers[j].setAnimation(null);
+              }
+               markers[i].setAnimation(google.maps.Animation.BOUNCE);
+               break;
+           }   
+       }
    });
 });
 
-function moveToselect(data){
+/*function moveToselect(data){
    
    
    console.log("");
@@ -537,12 +630,38 @@ function moveToselect(data){
    console.log(data.list[0].longtitude);       
    console.log("moveToPlace : " + map);
    
-   var div;
-    var templateSource = $("#boardTrTemplate").html();
+   Handlebars.registerHelper('imgTagBottom', function(stoImgName, traceNo) {
+			console.log("스토어이미지네임찍히는것인가?");
+			console.log(stoImgName);
+			console.log(traceNo);
+			var imgName = [];
+			imgName = stoImgName.split(",");
+			var imgTag='';
+	     	for(var i=0 ; i<imgName.length ; i++){
+	     		imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[i]+"' alt='Owl Image' value='"+traceNo+"'></div>";
+	     	}
+			
+			return imgTag;
+			
+		});
+   
+   var divOwl;
+    var templateSource = $("#boardTrTemplateBottom").html();
     var template = Handlebars.compile(templateSource);
-    div = template(data);
-    $("#addTr").children().remove();  
-    $("#addTr").append(div).hide().show( "slide", {direction: "left" }, 1000 );
+    divOwl = template(data);
+    $(".owl-ca").children().remove(); 
+    $(".owl-ca").append(divOwl);
+    
+    //var owlBottom = $("#owl-demo")
+	  $(".owl-ca").owlCarousel({
+	     
+		 items : 9,
+	     itemsDesktop : [1199,3],
+	     itemsDesktopSmall : [979,3],
+	      
+	    navigation:false,
+	    pagination:false
+	  });
    
    
    var latlng = new google.maps.LatLng(data.list[0].latitude, data.list[0].longtitude);
@@ -560,7 +679,7 @@ function moveToselect(data){
             break;
         }   
     }
-}
+}*/
 
 $(document).on("click",".fa-picture-o",function(){
    
@@ -574,4 +693,11 @@ $(document).on("click",".fa-picture-o",function(){
 $(document).on("click", "#centereds", function(){
 	   console.log("첫걸음");
 	   location.href="updatemember.html";
+	});
+
+
+$(document).on("click", "#memberTable", function(){
+	   console.log("안녕");
+	   moveToPlace();
+	   
 	});

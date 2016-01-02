@@ -921,7 +921,7 @@ $(function(){
     });
 });
 
-$(function(){
+/*$(function(){
 	 $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
 		 //console.log(data.alramcount);
 		 console.log(data.alramlist);
@@ -932,17 +932,17 @@ $(function(){
     var templateSource = $("#alramTemplate").html();
     var template = Handlebars.compile(templateSource);
     div = template(data);
-    /*console.log(div);*/
+    console.log(div);
     
     $("#alram").append(div);
 		 
 	 });
 	
-});
+});*/
 
 ////////////////////////////////////////친구 상단바 알림//////////////////////////////////////
 
-$(function(){
+/*$(function(){
 $.ajax({
 type:"POST",
 async: false,
@@ -960,7 +960,7 @@ friendId : keywordNos
 url:"/friend/listFriend",
 dataType:"json",
 success : function(data){
-/*console.log(data.list[0].friendMember.stoImgName);*/
+console.log(data.list[0].friendMember.stoImgName);
 if(data.list.length > 0){
 for(i=0 ; i<data.list.length ; i++){
 if(data.list[0].friendState == 1){
@@ -971,7 +971,7 @@ div = template(data);
 
 $("#friendList").append(data.listsize);
 
-/*console.log(div);*/
+console.log(div);
 
 $(".friend-header").after(div);
 }else{
@@ -984,7 +984,7 @@ $("#friendList").append("0");
 
 }
 });
-});
+});*/
 /////////////////////////////////수락////////////////////////////////////  
 
 $(document).on("click","#agree",function(){

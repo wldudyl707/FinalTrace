@@ -189,33 +189,14 @@ public class TraceController {
       model.addAttribute("list", list);
    }
 
-   @RequestMapping(value="selectTraceRadius", method=RequestMethod.POST)
-   public void selectTraceRadius(@RequestBody MinMaxLatLon minMaxLatLon, Model model) throws Exception{
-	   Map<String, Object> map = traceService.selectTraceRadius(minMaxLatLon);
-	   List<Trace> list = (List<Trace>)map.get("list");
-	   List<Trace> newlist = new ArrayList<>();
-		
-		for (Trace gettrace : list) {		   
-		   String[] image = gettrace.getStoImgName().split(",");
-		   
-		       Trace newtrace = new Trace();
-		       newtrace.setTraceNo(gettrace.getTraceNo());
-		       newtrace.setStoImgName(image[0]);
-		       newtrace.setLatitude(gettrace.getLatitude());
-		       newtrace.setLongtitude(gettrace.getLongtitude());
-		       newtrace.setAddr(gettrace.getAddr());
-		       newtrace.setMember(gettrace.getMember());
-			   newtrace.setText(gettrace.getText());
-			   newtrace.setTracedate(gettrace.getTracedate());
-			   newtrace.setFriend(gettrace.getFriend());
-			   newlist.add(newtrace);
-			   
-			  
-		   
-		}
-	   model.addAttribute("list", newlist);
-	  
-   }
+	@RequestMapping(value="selectTraceRadius", method=RequestMethod.POST)
+	   public void selectTraceRadius(@RequestBody MinMaxLatLon minMaxLatLon, Model model) throws Exception{
+		   Map<String, Object> map = traceService.selectTraceRadius(minMaxLatLon);
+		   List<Trace> list = (List<Trace>)map.get("list");
+
+		   model.addAttribute("list", list);
+		  
+	   }
    
    @RequestMapping(value="listTrace2", method=RequestMethod.POST)
    public void listTrace(Model model, @RequestBody Trace trace) throws Exception{

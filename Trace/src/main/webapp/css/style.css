@@ -158,13 +158,53 @@ ul.top-menu > li > .logout {
    padding-right:0px;
 }
 
+ul.top-menu > li > a {
+	color: #EFEFEF;
+	border: 1px solid #EFEFEF !important;
+}
 
+#members {
+	width: 350px;
+    position: absolute;
+    right: 2%;
+    top: 10%;
+    height: 60%;
+    overflow: auto;
+}
 
-.img-circle {
-    /* border-radius: 11%; */
+#members > .desc{
+	width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    padding-bottom: 0px;
+    height: 80px;
+}
+
+#members > .desc > .thumb {
+	float: left;
+	margin-top: 7%;
+}
+
+#members > .desc > .thumb > img {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#members > .desc > .details {
     width: 100%;
-    margin-top: -6%;
-    height: 200px;
+    height: 50px;	
+}
+
+#members > .desc > .details > p {
+	font-weight: bold;
+	padding: 10px;
+	font-size : smaller;
+	text-algin : left !important;	
 }
 
 
+#members > .desc > .buttons {
+	float: right;
+    vertical-align: middle;
+    margin-right: 20px;
+}
+	
