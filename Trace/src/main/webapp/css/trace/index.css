@@ -1,0 +1,65 @@
+header{
+    margin-bottom: 5%;
+    margin-top: 20px;
+   /*  border: 2px solid red; */
+    }
+    
+    .form-module input[type='text'], #pw{
+    	margin:0 0px;
+    }  
+    
+     input[type="file"] {
+ 		 position: absolute;
+ 		 width: 1px;
+ 		 height: 1px;
+ 		 padding: 0;
+  		 margin: -1px;
+  		 overflow: hidden;
+  		 clip:rect(0,0,0,0);
+ 		 border: 0;
+	}
+	
+	#imim{
+		text-align: center;
+		margin-bottom : 5px;
+	}
+	
+	.images{
+		text-align: center;
+		margin-bottom : 15px;
+		margin-left : 10px;
+	}
+	
+	.form-module {
+	margin-bottom: 10%;
+	margin-top:7%;
+	
+	}
+	
+	.navbar-default {
+    background-color: #FBF7F7;
+    border-color: #FBF7F7;
+}
+	
+	.jumbotron {
+	
+    position: relative;
+    background: #000 url("../../img/Trace-Logo-Web1.png") center center;
+    background-size: cover;
+    overflow: hidden;
+    margin-left: 10px;
+    max-width: 700px;
+    min-width: 400px;
+}
+
+.jumbotron {
+	
+    margin: auto;
+    padding: 80px;
+    margin-bottom: 30px;
+    font-size: 21px;
+    font-weight: 200;
+    line-height: 1.14285714;
+    color: inherit;
+    background-color: #ccc;
+}

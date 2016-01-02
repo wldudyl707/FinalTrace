@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FriendMapper">
+
+	<resultMap id="friendSelectMap" type="friend">
+		<result property="friendNo" column="fr_no" jdbcType="NUMERIC"/>
+		<result property="friendMemberId" column="id" jdbcType="VARCHAR"/>
+		<result property="friendId" column="fr_id" jdbcType="VARCHAR"/>
+		<result property="friendState" column="fr_state" jdbcType="NUMERIC"/>
+		
+		<association property="friendMember" javaType="member">
+		<id property="memberId" column="id" jdbcType="VARCHAR"/>
+		<result property="memberPwd" column="pw" jdbcType="VARCHAR"/>
+		<result property="memberName" column="name" jdbcType="VARCHAR"/>
+		<result property="email" column="email" jdbcType="VARCHAR"/>
+		<result property="handphone" column="handphone" jdbcType="VARCHAR"/>
+		<result property="role" column="role" jdbcType="VARCHAR"/>
+		<result property="oriImgName" column="original_img_name" jdbcType="VARCHAR"/>
+		<result property="stoImgName" column="stored_img_name" jdbcType="VARCHAR"/>
+		</association>
+		
+	</resultMap>
+	
+	
+	
+	<insert id="addFriend" parameterType="friend">
+	   INSERT
+	   INTO friend(fr_no, id, fr_id, fr_state)
+	   VALUES ( SEQ_FRIEND_FR_NO.NEXTVAL, #{friendMemberId}, #{friendId}, #{friendState})
+	</insert>
+	
+	<select id="listFriend" parameterType="String" resultMap="friendSelectMap">
+		SELECT
+		f.id, f.fr_id, f.fr_state, m.STORED_IMG_NAME
+		FROM FRIEND f inner join MEMBER m
+		on f.id = m.id
+    	where f.fr_id = #{value}
+	</select>
+	
+	<update id="agreeFriend" parameterType="friend">
+		UPDATE FRIEND
+		SET fr_state = '2'
+		WHERE id = #{friendMemberId} and fr_id = #{friendId}
+	</update>
+	
+	<delete id="disAgreeFriend" parameterType="friend">
+		DELETE FROM FRIEND
+		WHERE id = #{friendMemberId} and fr_id = #{friendId}
+	</delete>
+	
+	<delete id="deleteFriend" parameterType="friend">
+		DELETE FROM FRIEND
+		WHERE id = #{friendMemberId} and fr_id = #{friendId}
+	</delete>
+
+</mapper>
+
+
+

@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+        <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <meta name="description" content="">
+       <meta name="author" content="Dashboard">
+       <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+      
+      <title>Trace</title>
+      
+        <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+        <!-- Bootstrap core CSS -->
+       <link href="assets/css/bootstrap.css" rel="stylesheet">
+    
+       <link rel="stylesheet" type="text/css" href="assets/js/gritter/css/jquery.gritter.css" />
+       <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
+    
+       <!-- Custom styles for this template -->
+       <link href="assets/css/style.css" rel="stylesheet">
+       <link href="assets/css/style-responsive.css" rel="stylesheet">
+       
+       <!-- Trace styles for this template -->
+       <link href="css/googlemap.css" rel="stylesheet" type="text/css">
+       <link href="css/style.css" rel="stylesheet">
+       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+       <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+       <![endif]-->
+       
+<style>
+.wrapper {
+    display: inline-block;
+    margin-top: 60px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    width: 100%;
+}
+       #share-img{
+              box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2); 
+         border: 3px solid white;
+        }
+        
+        #share-img:hover{
+         box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.3); 
+        }
+        
+::-webkit-scrollbar {
+      width: 15px;
+} /* this targets the default scrollbar (compulsory) */
+        
+::-webkit-scrollbar-track {
+      background-color: #AFE1FF;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2); 
+} /* this will style the thumb, ignoring the track */
+ 
+::-webkit-scrollbar-button {
+      background-color: rgba(0, 0, 0, 0.2);
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+::-webkit-scrollbar-corner {
+      background-color: black;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+.buttons{
+float:right;
+text-align: center;
+margin-top:4%;
+}
+
+#memberImg{
+margin-top:50%;
+}
+
+.message{
+float : left;
+}
+
+.time{
+float : right;
+}
+
+#photos{
+margin-top : 1.5%;
+}
+
+.dropdown-menu.inbox li a .subject .time {
+   /* margin-left:5%; */
+    font-size: 11px;
+    font-style: italic;
+    font-weight: bold;
+    position: relative;
+    right: 5px;
+    cursor: pointer;
+}
+
+.from{
+   margin-right: 30%;
+}
+</style>
+</head>
+
+<body>
+<section id="container" >
+      <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+      <!--header start-->
+      <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+            <!--logo start-->
+            <a href="index.html" class="logo"><b>TRACE</b></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-users"></i>
+                            <span class="badge bg-theme" id="friendList"></span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li class="friend-header">
+                                <p class="green">You have 5 new messages</p>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme" id="arlam"></span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox" id="alram">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">You have new messages</p>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- inbox dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" id="myBtn">Logout</a></li>
+               </ul>
+            
+            </div>
+        </header>
+      <!--header end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN SIDEBAR MENU
+      *********************************************************************************************************************************************************** -->
+      <!--sidebar start-->
+      <aside>
+          <div id="sidebar"  class="nav-collapse ">
+              <!-- sidebar menu start-->
+              <ul class="sidebar-menu" id="nav-accordion">
+
+                 <p class="centered"><a href="profile.html"><img src="" class="img-circle" width="60"></a></p>
+                <h5 class="centered" id="centereds"></h5>
+
+                  <li class="mt">
+                      <a class="active">
+                          <i class="fa fa-home"></i>
+                          <span>Home</span>
+                      </a>
+                  </li>
+
+                  <li class="sub-menu">
+                      <a href="write.html" >
+                          <i class="fa fa-pencil-square-o"></i>
+                          <span>Write</span>
+                      </a>
+                  </li>
+
+                  <li class="sub-menu">
+                      <a href="gallery.html" >
+                          <i class="fa fa-picture-o"></i>
+                          <span>Gallery</span>
+                      </a>
+                  </li>
+              </ul>
+              <!-- sidebar menu end-->
+          </div>
+      </aside>
+      <!--sidebar end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper site-min-height">
+             <!-- <h3><i class="fa fa-angle-right"></i> Blank Page</h3> -->
+             <!-- <div class="row"> -->
+                <div class="col-lg-12">
+                <input id="pac-input" class="form-control" name="submit" type="text" placeholder="지역을 입력하세요..">
+                <div id="map"></div>
+                </div>
+             <!-- </div> -->
+         
+      </section><!-- --/wrapper ---->
+      </section>
+</section>
+        
+            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+         <script type="text/javascript" src="js/handlebars.min.js"></script>  
+        <script src="js/plugins.js"></script>
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="js/vendor/jquery.ui.widget.js"></script>  
+        
+        <script src="https://maps.googleapis.com/maps/api/js?signed_in=false&libraries=places,drawing"></script>
+        <script src="js/googlemap.js?index=data" type="text/javascript"></script>
+        <script> google.maps.event.addDomListener(window, 'load', initialize);</script>
+         <script src="js/jstorage.js"></script>
+         
+         <script src="js/logout/logout.js"></script>
+      
+        <script type="text/javascript">
+             var keywordNo = sessionStorage.getItem("memberId");
+              var keywordNos = JSON.parse(keywordNo);
+              console.log(keywordNos);
+       </script>
+       
+        <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+   
+       <!--common script for all pages-->
+       <script src="assets/js/common-scripts.js"></script>
+         
+        <script id="boardTrTemplate" type="text/x-handlebars-template">
+         {{#list}}
+      
+                  <div class="col-md-4 mb">
+                            <img src="trace_thumb/{{stoImgName}}" class="trace" value="{{traceNo}}" id="share-img" width="100%" height="250px" data-toggle="modal" data-target="#myModal{{@key}}">
+                     <input type="hidden" class="traceNo" value="{{traceNo}}">
+                        <p><i class="fa fa-comment"></i> 18 | <i class="fa fa-heart"></i> 49</p>
+                  </div>
+
+
+                 <!-- Modal -->
+               <div class="modal fade bs-example-modal-lg"  id ="myModal{{@key}}" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg"">
+                    <div class="modal-content" >
+      
+                  <div class="modal-body">
+                      <td><img src="trace_thumb/{{stoImgName}}"  id="test" width="100%" height="500px" value="{{traceNo}}"></td>
+                  <h4 class="modal-text" id="gridSystemModalLabel2">{{text}}</h4>
+                  <h4 class="modal-text" id="gridSystemModalLabel3">{{tracedate}}</h4>
+                  </div>
+
+                   <div class="modal-footer">
+                        <div class="modal{{@key}}" margin-top="100px" style="overflow-y:auto; height:150px;" id="footerscroll"></div>
+                        <div id="wtext">   
+                       <div id="{{@key}}" contenteditable="true" style="width: 70%; height: 50px;" class="texteditor"></div>
+                        </div>  
+                        <a target="_blank" class="w3-btn" id="create" value="{{traceNo}}" >등록</a>
+                       </div>
+      
+               </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+         {{/list}}
+       </script>
+       
+         <script id="boardTrTemplate2" type="text/x-handlebars-template">
+         {{#list}}
+      
+                  <div class="desc">
+                         <div class="thumb">
+                            <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
+                            <!-- <br/><p>DIVYA MANIAN</p> -->
+                         </div>
+                         <div class="details">
+                     <input type="hidden" class="traceNo" value="{{traceNo}}">
+                            <p>{{member.memberId}}<br/>
+                               <a href="#">{{addr}}</a><br/>
+                               <muted>{{tracedate}}</muted>
+                            </p>
+                         </div>
+                         <div class="buttons" id="{{friend.friendState}}" value="{{member.memberId}}">
+                      <i class="fa fa-user-plus fa-lg {{member.memberId}}" id="{{member.memberId}}"></i>                           
+                            <i class="fa fa-picture-o fa-lg"></i>
+                  </div>
+                      </div>
+
+         {{/list}}
+        </script>
+                
+        <script id="alramTemplate" type="text/x-handlebars-template">
+      {{#alramlist}}
+               
+                  <li>
+                                <a href="index.html#">
+                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{replyMember.stoImgName}}" id="photos"></span>
+                                    <span class="subject">
+                                    <span class="from">{{replyMember.memberId}}님이 회원님의 <br>댓글에 답글을 남겼습니다.</span>
+                                    </span>
+                        
+                                    <span class="message">
+                                        {{comm}}
+                                    </span>
+                           <span class="time">{{commDate}}</span>
+                           
+                                </a>
+                            </li>
+
+      {{/alramlist}}
+      </script>
+      
+      <script id="friendTemplate" type="text/x-handlebars-template">
+         {{#list}}
+      
+                  <li class="agreeFriend">
+                                <a>
+                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{friendMember.stoImgName}}"></span>
+                                    <span class="subject">
+                                    <span class="from">{{friendMemberId}}</span>
+                           
+                                    <span class="time" id="agree">수락</span>
+<span class="time" id="disAgree">거절</span>
+                                    </span>
+                                    <!-- "fa fa-smile-o"
+                                    "fa fa-frown-o" -->
+                                    <span class="message">
+                                          님에게 친구 요청이 왔습니다.
+                                    </span>
+                                </a>
+                       </li>
+
+         {{/list}}
+       </script>
+       
+    <script type="text/javascript">
+    $(window).load(function(){
+         $("#map").hide().show( "slide", {direction: "up" }, 1000 );
+    });
+    </script>
+</body>
+</html>

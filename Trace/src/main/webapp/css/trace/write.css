@@ -1,0 +1,78 @@
+body{
+background-color: #fff;
+}
+
+input[type="file"] {  /* 파일 필드 숨기기 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
+
+.w3-btn {
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 6px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none !important;
+    color: #fff;
+    background-color: #000;
+    text-align: center;
+    transition: .2s ease-out;
+    cursor: pointer;
+    white-space: nowrap;
+}   
+
+a.w3-btn:hover, a.w3-btn:active {
+    background-color: #2A5577;
+    color: #FFFFFF;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+a.w3-btn, a.w3-btn:link, a.w3-btn:visited {
+    color: #FFFFFF;
+    background-color: #5FB6F9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+fieldset{
+text-align: center;
+margin-top: 20px;
+}
+
+p1{
+
+font-size: 22px;
+color: #5FB6F9;
+}
+
+p1:hover{
+color: #2A5577;
+}
+
+.tracearea {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+    background-color: #f1f1f1;
+    padding: 0.01em 16px;
+}
+
+#map { height: 450px }
+
+.fa-times:before {
+    
+    position: absolute;
+    top: 39px;
+    
+    
+    left: -12px;
+}      
+
+element.style {
+    width: 120px;
+}

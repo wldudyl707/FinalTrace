@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="LikeStateMapper">
+	
+	<resultMap id ="likeStateSelectMap" type="likeState">
+		<result property="traceNo" column="trace_no" jdbcType="INTEGER"/>
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="likeState" column="like_st" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<insert id="insertLikeState" parameterType="likeState">
+	INSERT
+	INTO likestate(trace_no, id, like_st)
+	VALUES(#{traceNo}, #{id}, #{likeState})
+	</insert>
+	
+	<select id="getLikeState" parameterType="likeState" resultMap="likeStateSelectMap">
+	SELECT * FROM likestate
+	WHERE trace_no = #{traceNo} and id = #{id}
+	</select>
+	
+	<delete id="updateLikeState" parameterType="likeState">
+	DELETE FROM likestate
+	WHERE trace_no = #{traceNo} and id=#{id}
+	</delete>
+</mapper>

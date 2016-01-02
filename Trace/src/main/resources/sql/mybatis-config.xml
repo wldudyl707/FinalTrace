@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+ 		 PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ 		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+  						
+<!--	mybatis-config.xml :: MyBatis Framework  MetaData -->
+<configuration>
+
+	<!-- 기타 설정정보 :: [MyBatis_Home]/mybatis-3.2.1.pdf 참조 -->
+	<settings>
+		<setting name="callSettersOnNulls" value="false"/>
+	</settings>	
+	
+	<!-- FQCN(Full Qualified Class Name) Alias(별칭관리) -->
+	<typeAliases>
+		<typeAlias alias="member" type="com.trace.service.domain.Member" />
+		<typeAlias alias="trace" type="com.trace.service.domain.Trace" />
+		<typeAlias alias="reply" type="com.trace.service.domain.Reply" />
+		<typeAlias alias="minMaxLatLon" type="com.trace.service.domain.MinMaxLatLon" />
+		<typeAlias alias="friend" type="com.trace.service.domain.Friend" />
+		<typeAlias alias="likeState" type="com.trace.service.domain.LikeState" />
+		
+	</typeAliases>
+	
+	 <!-- SQL Definition :: file include -->
+	<mappers>
+		<mapper resource="sql/MemberMapper.xml"/>
+		<mapper resource="sql/TraceMapper.xml"/> 
+		<mapper resource="sql/ReplyMapper.xml"/> 
+		<mapper resource="sql/FriendMapper.xml"/>
+		<mapper resource="sql/LikeStateMapper.xml"/>
+	</mappers>
+
+</configuration>

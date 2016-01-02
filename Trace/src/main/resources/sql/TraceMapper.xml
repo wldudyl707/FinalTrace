@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TraceMapper">
+	<resultMap id="traceSelectMap" type="trace">
+		<result property="traceNo"    			column="trace_no" 		jdbcType="INTEGER"/>
+		<result property="traceId"    			column="id" 			jdbcType="VARCHAR"/>
+		<result property="latitude"    		    column="latitude" 		jdbcType="VARCHAR"/>
+		<result property="longtitude"    		column="longtitude" 	jdbcType="VARCHAR"/>
+		<result property="tracedate"    		column="trace_date" 	jdbcType="DATE"/>
+		<result property="text"    				column="text" 			jdbcType="CLOB"/>
+		<result property="traceLikes"    			column="trace_like" 			jdbcType="INTEGER"/>
+		<result property="oriImgName" 			column="original_img_name" jdbcType="VARCHAR"/>
+		<result property="stoImgName" 			column="trace_img_name" jdbcType="VARCHAR"/>
+		<result property="addr"					column="addr"			 jdbcType="VARCHAR"/>
+		
+		
+		<association property="member" javaType="member">
+		<id property="memberId" column="id" jdbcType="VARCHAR"/>
+		<result property="memberPwd" column="pw" jdbcType="VARCHAR"/>
+		<result property="memberName" column="name" jdbcType="VARCHAR"/>
+		<result property="email" column="email" jdbcType="VARCHAR"/>
+		<result property="handphone" column="handphone" jdbcType="VARCHAR"/>
+		<result property="role" column="role" jdbcType="VARCHAR"/>
+		<result property="oriImgName" column="original_img_name" jdbcType="VARCHAR"/>
+		<result property="stoImgName" column="stored_img_name" jdbcType="VARCHAR"/>
+		</association>
+		
+		<association property="friend" javaType="friend">
+			<result property="friendNo" column="fr_no" jdbcType="NUMERIC"/>
+			<result property="friendMemberId" column="id" jdbcType="VARCHAR"/>
+			<result property="friendId" column="fr_id" jdbcType="VARCHAR"/>
+			<result property="friendState" column="fr_state" jdbcType="NUMERIC"/>
+		</association>
+		 	
+	</resultMap>
+	
+   <insert id="jsonAddTrace" parameterType="trace">
+   INSERT
+   INTO trace(trace_no, id, latitude, longtitude, trace_date, text, trace_like, 
+   original_img_name, trace_img_name, addr)   
+   VALUES (  seq_trace_trace_no.nextval,
+             #{traceId},
+             #{latitude},
+             #{longtitude},
+              SYSDATE,
+             #{text:VARCHAR},
+             #{traceLikes:NUMERIC},
+             #{oriImgName},
+             #{stoImgName},
+             #{addr:VARCHAR})
+   </insert>
+   
+   <select id="getTraceList" parameterType="map" resultMap="traceSelectMap">
+	SELECT
+	trace_no, original_img_name, trace_like, id, trace_img_name, addr, text
+	FROM trace
+	WHERE id = #{value}
+   </select>
+
+   <update id="updateTrace" parameterType="trace">
+   	UPDATE trace
+   	<set>  	
+   		<if test="traceId != null">id=#{traceId},</if>
+   		<if test="tracedate != null">trace_date=#{tracedate},</if>
+   		<if test="traceLikes != null">trace_like=#{traceLikes},</if> 
+   		 <if test="latitude != null">latitude=#{latitude},</if>
+   		<if test="longtitude != null">longtitude=#{longtitude},</if> 
+   		<if test="addr !=null">addr=#{addr},</if>
+   		<if test="text != null">text=#{text},</if>
+   		<if test="oriImgName != null">original_img_name=#{oriImgName},</if>
+   		<if test="stoImgName != null">trace_img_name=#{stoImgName}</if>
+   	</set>
+   	WHERE trace_no = #{traceNo}   	
+   </update> 
+   
+<!--    <select id="getmapList" parameterType="trace" resultMap="traceSelectMap">
+    select m.id, m.stored_img_name, t.trace_date,t.TRACE_NO, t.ID, t.LATITUDE, t.addr,t.LONGTITUDE,t.trace_img_name from member m inner join 
+    (select*from (
+	select TRACE_NO, ID, LATITUDE, LONGTITUDE, TRACE_IMG_NAME,TRACE_DATE,
+	(6371 * acos(cos(degree2radian(#{latitude}) ) * cos (degree2radian ( LATITUDE ) )
+	* cos (degree2radian(LONGTITUDE) - degree2radian(#{longtitude}))+sin( degree2radian (#{latitude} ))*sin(degree2radian ( LATITUDE ) ) ) ) as distance from trace ) 
+	where distance &lt;=5
+	ORDER BY distance) t
+	
+    </select> -->
+   
+   <select id="selectTraceRadius" parameterType="minMaxLatLon" resultMap="traceSelectMap">
+   select m.id, m.stored_img_name, 
+   		  t.trace_date,t.trace_no, t.id, t.latitude, t.addr,t.longtitude,t.trace_img_name, t.text,
+          f.FR_NO, f.ID, f.FR_ID, f.FR_STATE 
+     from member m 
+     inner join
+	   		(SELECT trace_no, id, latitude, longtitude, trace_img_name, addr, trace_date, text
+	   		   FROM trace
+	   		  WHERE latitude BETWEEN #{minLatitude} AND #{maxLatitude}
+	   		    AND longtitude BETWEEN #{minLongitude} AND #{maxLongitude}) t
+   		on m.id = t.id
+   	 left outer join friend f
+   	    on m.id = f.id   	 	
+   </select>
+   
+    <select id="getTraceList2" parameterType="int" resultMap="traceSelectMap">
+   SELECT
+   trace_no, original_img_name, trace_like, id, trace_img_name ,addr ,text
+   FROM trace
+   WHERE trace_no =#{value}
+   </select>
+   
+      <select id="selectmapList" parameterType="map" resultMap="traceSelectMap">
+   SELECT
+	trace_no,latitude,longtitude,trace_img_name,text
+	FROM trace
+	WHERE trace_no = #{value}
+   </select>
+   
+   <select id="getTraceLike" parameterType="int" resultMap="traceSelectMap">
+	SELECT
+	trace_no, original_img_name, trace_like, id, trace_img_name, addr, text
+	FROM trace
+	WHERE trace_no = #{value}
+   </select>
+   
+   <update id="updatelikes" parameterType="int">
+   UPDATE trace
+   SET trace_like = #{traceLikes}
+   WHERE trace_no =#{traceNo}
+   </update>
+</mapper>

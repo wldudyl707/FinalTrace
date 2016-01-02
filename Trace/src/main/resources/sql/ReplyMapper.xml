@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReplyMapper">
+	<resultMap id="replySelectMap" type="reply">
+		<result property="commNo"    			column="comm_no" 		jdbcType="INTEGER"/>
+		<result property="traceNo"    			column="trace_no" 			jdbcType="INTEGER"/>
+		<result property="id"    		    column="id" 		jdbcType="VARCHAR"/>
+		<result property="comm"    		column="comm" 	jdbcType="VARCHAR"/>
+		<result property="commDate"    		column="comm_date" 	jdbcType="DATE"/>
+		<result property="likes"    			column="likes" 			jdbcType="INTEGER"/>
+		<result property="repNo"    				column="rep_no" 			jdbcType="INTEGER"/>
+		<result property="repLevel" 			column="rep_level" jdbcType="INTEGER"/>
+		<result property="repStep" 			column="rep_step" jdbcType="INTEGER"/>
+	
+		
+		<association property="replyMember" javaType="member">
+		<id property="memberId" column="id" jdbcType="VARCHAR"/>
+		<result property="memberPwd" column="pw" jdbcType="VARCHAR"/>
+		<result property="memberName" column="name" jdbcType="VARCHAR"/>
+		<result property="email" column="email" jdbcType="VARCHAR"/>
+		<result property="handphone" column="handphone" jdbcType="VARCHAR"/>
+		<result property="role" column="role" jdbcType="VARCHAR"/>
+		<result property="oriImgName" column="original_img_name" jdbcType="VARCHAR"/>
+		<result property="stoImgName" column="stored_img_name" jdbcType="VARCHAR"/>
+		<result property="lastLogin" column="last_login" jdbcType="DATE"/>
+		</association>
+		
+		<association property="replyTrace" javaType="trace">
+		<result property="traceNo"    			column="trace_no" 		jdbcType="INTEGER"/>
+		<result property="traceId"    			column="id" 			jdbcType="VARCHAR"/>
+		<result property="latitude"    		    column="latitude" 		jdbcType="VARCHAR"/>
+		<result property="longtitude"    		column="longtitude" 	jdbcType="VARCHAR"/>
+		<result property="tracedate"    		column="trace_date" 	jdbcType="DATE"/>
+		<result property="text"    				column="text" 			jdbcType="CLOB"/>
+		<result property="traceLikes"    			column="trace_like" 			jdbcType="INTEGER"/>
+		<result property="oriImgName" 			column="original_img_name" jdbcType="VARCHAR"/>
+		<result property="stoImgName" 			column="trace_img_name" jdbcType="VARCHAR"/>
+		<result property="addr"					column="addr"			 jdbcType="VARCHAR"/>
+		</association>
+	</resultMap>
+	
+   <insert id="jsonAddReply" parameterType="reply">
+   INSERT
+   INTO reply(comm_no, trace_no, id,  comm, comm_date, likes, rep_no, rep_level, rep_step)   
+   VALUES (seq_reply_comm_no.nextval,
+             #{traceNo}, 
+             #{id},
+             #{comm},
+              SYSDATE, 
+             #{likes:NUMERIC},
+             #{repNo},
+             #{repLevel},
+             #{repStep})
+   </insert>
+   
+   <select id="jsonGetReply" parameterType="int"  resultMap="replySelectMap">
+    select m.id, m.original_img_name, r.comm_no, r.trace_no, r.id, r.comm, r.comm_date, r.likes, r.rep_no, r.rep_level, r.rep_step
+   from member m inner join reply r
+   on m.id = r.id
+   where r.trace_no = #{value}
+   order by r.comm_no desc
+   </select>
+   
+   <select id="jsonListReply" parameterType="int" resultMap="replySelectMap">
+	SELECT comm, comm_no, rep_no, id, comm_date, likes, rep_level, rep_step, trace_no
+	FROM reply
+	START WITH rep_no = 0 and trace_no= #{value}
+	CONNECT BY PRIOR comm_no = rep_no
+	ORDER SIBLINGS BY comm_no
+   </select>
+   
+   <update id="jsonDeleteReply" parameterType="int">
+	UPDATE reply
+	SET comm = '삭제된 댓글입니다.'
+	WHERE comm_no = #{value}
+   </update>
+   
+   
+   
+   
+   
+   <select id="getReply" parameterType="reply" resultMap="replySelectMap">
+   	SELECT r.comm_no, r.trace_no, r.id, r.comm, r.comm_date, r.likes, r.rep_no, r.rep_level, r.rep_step, t.trace_like
+	FROM reply r inner join trace t
+	on r.trace_no = t.trace_no
+	WHERE r.trace_no = #{traceNo}
+   </select>
+   
+   
+   <select id="checkReply" parameterType="reply" resultMap="replySelectMap">
+   	SELECT r.comm_no, r.trace_no, r.id, r.comm, r.comm_date, r.likes, r.rep_no, r.rep_level, r.rep_step, m.stored_img_name
+	FROM reply r inner join member m
+	on r.id = m.id
+	WHERE 
+	r.comm_date >= #{replyMember.lastLogin}
+	and r.rep_no = #{commNo}
+   </select>
+   
+   <select id="alramReply" parameterType="String" resultMap="replySelectMap">
+   	SELECT r.comm_no, r.likes, r.id, m.last_login
+	FROM reply r inner join member m
+	on r.id = m.id
+	WHERE r.id = #{value}
+   </select>
+
+
+</mapper>

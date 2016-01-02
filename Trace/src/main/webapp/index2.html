@@ -1,0 +1,275 @@
+$(document).ready(function() {
+	   var value = sessionStorage.getItem("memberId");
+			if (value != null){
+				self.location = "sharemap.html";
+			}else{
+				var div = "1";
+				var templateSource = $("#indeximport").html();
+				var template = Handlebars.compile(templateSource);
+				var test = template(div);
+				$(test).appendTo("#section");
+			}
+});
+
+/*아이디 줄복 체크  */
+//$("#id").change(function(){
+$(document).on("change","#id",function(){
+   var id = document.getElementById('id');
+   var idms = document.getElementById('idfeedback');
+   if(id.value.length < 5){
+      idms.textContent='아이디를 5자 이상 입력해 주세요';
+   }else{
+      idms.textContent='';
+      fncIdCheck();
+   }
+});
+
+function fncIdCheck(){
+   $.ajax({
+      type:"POST",
+      async: false,
+      headers : 
+      {
+         "Accept" : "application/json",
+         "Content-Type" : "application/json"
+      },
+      data: JSON.stringify
+      ({
+    	  memberId:$("#id").val()
+      }),
+      url:"/member/getJsonMember",
+      dataType:"json",
+      success : function(data){
+         if(data.member == null){         
+            //alert("사용 할 수 있는 아이디 입니다");
+            $("#idfeedback").text("사용 할 수 있는 아이디 입니다.").css("color","blue");
+            return false;
+         }else{
+            //alert("사용 불가능 아이디 입니다.");
+            $("#idfeedback").text("사용 불가능 아이디 입니다.").css("color","#F15F5F");
+            return false;
+         }
+      }
+   });
+}
+
+$(document).on("change","#pw",function(){
+   var pw = document.getElementById('pw');
+   var pwms = document.getElementById('pwfeedback');
+   if(pw.value.length < 8){
+      pwms.textContent='패스워드를 8자 이상 입력해 주세요';
+   }else{
+      pwms.textContent='';
+   }
+});
+
+$(document).on("change","#name",function(){
+   var name = document.getElementById('name');
+   var namems = document.getElementById('nmfeedback');
+   if(name.value.length < 2){
+      namems.textContent='이름을 다시 입력해주세요';
+   }else{
+      namems.textContent='';
+   }
+});
+
+$(document).on("change","#email",function(){
+   var email = document.getElementById('email');
+   var emailms = document.getElementById('emfeedback');
+   if(email.value.length < 5){
+      emailms.textContent='이메일을 다시 입력해주세요';
+   }else{
+      emailms.textContent='';
+   }
+});
+
+$(document).on("change","#ph",function(){
+   var ph = document.getElementById('ph');
+   var phms = document.getElementById('phfeedback');
+   if(ph.value.length < 10){
+      phms.textContent='핸드폰 번호를  다시 입력해주세요';
+   }else{
+      phms.textContent='';
+   }
+});
+
+
+/* 선택한 사진 보여주기  */
+$(function(){
+          $("#fileupload").change(function () {
+              if (typeof (FileReader) != "undefined") {
+                  var dvPreview = $(".images");
+                  dvPreview.html("");
+                  var regex = /^([가-힣a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                  $($(this)[0].files).each(function () {
+                      var file = $(this);
+                      if (regex.test(file[0].name.toLowerCase())) {
+                          var reader = new FileReader();
+                          reader.onload = function (e) {
+                              var img = $("<img />");
+                              img.attr("name",file[0].name);
+                              img.attr("id","multi");
+                              img.attr("style", "width:50px; height:50px; margin-right: 10px;margin-top: 10px;");
+                              img.attr("src", e.target.result);
+                              
+                              dvPreview.append(img);
+                            
+                          }
+                          reader.readAsDataURL(file[0]);
+                      } else {
+                          alert(file[0].name + " is not a valid image file.");
+                          dvPreview.html("");
+                          return false;
+                      }
+                  });
+              } else {
+                  alert("This browser does not support HTML5 FileReader.");
+              }
+		});
+}); 
+
+var aFile = null;
+
+$(function(){
+	$('#fileupload').fileupload({
+		dataType:'json',
+		url:'/member/addMember',
+		autoUpload: false
+	}).on('fileuploadadd', function(e, file){
+		aFile = file.files[0];
+	});
+});
+
+/* 회원가입 */
+$(function() {
+         $("#register-submit").on("click" , function() {
+            
+            var id = $("input[id='id']").val();
+            var pw = $("input[id='pw']").val();
+            var name = $("input[id='name']").val();
+            var email = $("input[id='email']").val();
+            var ph = $("input[id='ph']").val();
+            
+            
+            if(id == null || id.length<5){
+               var id = document.getElementById('id');
+               var idms = document.getElementById('idfeedback');
+               if(id.value.length < 5){
+                  $('#idfeedback').attr("style","margin-top:5px;color:#F15F5F;font-size:5px");
+                  idms.textContent='아이디를 5자 이상 입력해주세요';
+               }else{
+                  idms.textContent='';
+               }
+               return false;
+            }
+            
+            if(pw == null || pw.length<8){
+               var pw = document.getElementById('pw');
+               var pwms = document.getElementById('pwfeedback');
+               if(pw.value.length < 8){
+                  $('#pwfeedback').attr("style","margin-top:5px;color:#F15F5F;font-size:5px");
+                  pwms.textContent='패스워드를 8자 이상 입력해 주세요';
+               }else{
+                  pwms.textContent='';
+               }
+               return false;
+            }
+            
+            if(name == null || name.length<2){
+               var nmfeedback = document.getElementById('nmfeedback'); 
+               var nmcheck = document.getElementById('name');
+               if(nmcheck.value.length < 2 ){
+                  $('#nmfeedback').attr("style","margin-top:5px;color:#F15F5F;font-size:5px");
+                  nmfeedback.textContent = '이름을 잘못 입력하셨습니다';
+               }else{
+                  nmfeedback.textContent = '';
+               }
+               return false;
+            }
+                        
+            if(email == null ||  email.length<8){
+               var email = document.getElementById('email');
+               var emailms = document.getElementById('emfeedback');
+               if(email.value.length < 5){
+                  $('#emfeedback').attr("style","margin-top:5px;color:#F15F5F;font-size:5px");
+                  emailms.textContent='이메일을 다시 입력해주세요';
+               }else{
+                  emailms.textContent='';
+               }
+               
+               return false;
+            }
+            
+            if(ph == null || ph.length<10){
+               var ph = document.getElementById('ph');
+               var phms = document.getElementById('phfeedback');
+               if(ph.value.length < 10){
+                  $('#phfeedback').attr("style","margin-top:5px;color:#F15F5F;font-size:5px");
+                  phms.textContent='핸드폰 번호를  다시 입력해주세요';
+               }else{
+                  phms.textContent='';
+               }
+               return false;
+            }
+
+            $("#fileupload").fileupload('send', {files:aFile, formData:{memberId : id,
+														                memberPwd: pw,
+														                memberName: name,
+														                email: email,
+														                handphone: ph}
+            	})
+			   .error(function(jqXHR, textStatus, errorThrown){console.log('error');})
+	           .complete(function(result, textStatus, jsXHR){
+	               alert("회원가입이 완료되었습니다. 로그인 해주세요.");
+	               location.href = "index.html";
+	           });
+         });
+});
+      
+/* 로그인 */
+$(function() {
+          $("#login-submit").on("click" , function() {
+             jsonLogin();
+         });
+      });
+      
+function jsonLogin(){
+         $.ajax({
+            type:"POST",
+            async: false,
+            headers : {
+               "Accept" : "application/json",
+               "Content-Type" : "application/json"
+            },
+            data: JSON.stringify({
+               memberId : $("#logid").val(),
+               memberPwd: $("#logpassword").val()
+            }),
+            url:"/member/jsonLogin",
+            dataType:"json",
+            success:function(data, status, jXHR){
+               if(data.member!=null){
+
+            	
+            	  var session =  JSON.stringify(data.memberId);
+            	  console.log("check"+session);
+            	  sessionStorage.setItem('memberId',session);
+            	  
+                  console.log(data.memberId);
+                  location.href = "sharemap.html";
+               
+               }else{
+                  alert("ID 또는 Password를 확인해주세요.");
+                  $("#login-form").on("submit", function(event){
+                     event.preventDefault();
+                  })
+               }
+            }
+         });
+         
+        
+}
+
+
+
+

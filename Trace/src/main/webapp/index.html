@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <title>Trace</title>
+    
+    <!-- 구글폰트 -->
+	<link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+	<!-- 폰트어썸 -->
+	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+	<!-- 로그인화면 -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/trace/index.css">
+    
+  </head>
+  
+<style type="text/css">  
+</style>
+
+<body>
+
+<section id="section">
+ 
+</section>
+
+<!-- javasctipt는 여기에 추가하거라  -->
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="js/index.js"></script>
+<script src="js/vendor/jquery.ui.widget.js"></script>      
+<script src="js/jquery.fileupload.js"></script>
+<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+<script src="js/vendor/respond.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/jstorage.js"></script>
+<script type="text/javascript" src="js/handlebars.min.js"></script>
+
+<script src="js/index/index.login.js"></script>
+<!-- function은 여기에 추가해라 -->
+
+
+<script src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.backstretch.min.js"></script>
+    
+    <script>
+        $.backstretch("assets/img/login-image2.jpg", {speed: 500});
+    </script> 
+
+<script id="indeximport" type="text/x-handlebars-template">
+		
+ 
+     <div class="module form-module">
+  <div class="toggle"><i class="fa fa-times fa-pencil"></i>
+    <div class="tooltip">Sign Up</div>
+  </div>
+  <div class="form">
+    <h2>Login to your account</h2>
+    <form onsubmit="return false;">
+      <input type="username" placeholder="Username" id="logid"/>
+      <input type="password" placeholder="Password" id="logpassword"/>
+      <button id="login-submit">Login</button>
+    </form>
+  </div>
+  <div class="form">
+    <h2>Create an account</h2>
+    <form onsubmit="return false;">
+      <input type="text" placeholder="UserID" id="id" /><div id="idfeedback" style="margin-top:5px; font-size:5pt; color:#BDBDBD"></div></br>
+      <input type="password" placeholder="Password" id="pw"/><div id="pwfeedback" style="margin-top:5px; font-size:5pt; color:#BDBDBD"></div></br>
+      <input type="text" placeholder="UserName" id="namecheck" onkeypress="name_check(event)"/><div id="nmfeedback" style="margin-top:5px; font-size:5pt; color:#BDBDBD"></div></br>
+      <input type="text" placeholder="Email Address" id="email"/><div id="emfeedback" style="margin-top:5px; font-size:5pt; color:#BDBDBD"></div></br>
+      <input type="text" placeholder="Phone Number" id="ph" onkeypress="phone_check(event)"/><div id="phfeedback" style="margin-top:5px; font-size:5pt; color:#BDBDBD"></div></br>
+      <div id="imim"><label for="fileupload" class="fa fa-camera-retro"></label><input id="fileupload" type="file" name="files"></div><div class="images"></div>
+                     
+       
+      <button id="register-submit">Register</button>
+      
+    </form>
+   
+  </div>
+  <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>
+</div>
+      
+</script>    
+    
+  </body>
+</html>
