@@ -31,6 +31,8 @@
        <link href="css/googlemap.css" rel="stylesheet" type="text/css">
        <link href="css/style.css" rel="stylesheet">
        
+       <link href="css/media.css" rel="stylesheet">
+       
        <link type="text/css" rel="stylesheet" href="css/owl/owl.carousel.css"></script>
        <link type="text/css" rel="stylesheet" href="css/owl/owl.theme.css"></script>
        <link type="text/css" rel="stylesheet" href="css/owl/owl.transitions.css"></script>
@@ -41,16 +43,16 @@
        <![endif]-->
        
 <style>
-	   .wrapper {
-		    display: inline-block;
-		    margin-top: 60px;
-		    padding-left: 0px;
-		    padding-right: 0px;
-		    padding-bottom: 0px;
-		    padding-top: 0px;
-		    width: 100%;
-		}
-		
+      .wrapper {
+          display: inline-block;
+          margin-top: 60px;
+          padding-left: 0px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+          padding-top: 0px;
+          width: 100%;
+      }
+      
        #share-img{
               box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2); 
          border: 3px solid white;
@@ -119,6 +121,29 @@ margin-top : 1.5%;
 #owl-demo{
 bottom:50px;
 }
+
+/* .img-circle {
+  width: 100%;
+  margin-top: -7%;
+  height: 250px;
+} */
+
+.container > #owl-demo {
+   bottom:0px;
+}
+
+.modalItem img {
+    height: 400px !important;
+}
+
+.modal-header {
+    background: #555050;
+}
+
+.text {
+    border-bottom: 1px solid #E5E5E5;
+}
+
 
 </style>
 </head>
@@ -190,7 +215,10 @@ bottom:50px;
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
 
-                <p class="centered"><a href="profile.html"><img src="" class="img-circle" width="60"></a></p>
+                <div class="thumbImg">
+                    <a href="updatemember.html"><img src="" class="img-circle"></a>
+                </div>
+                
                 <h5 class="centered" id="centereds"></h5>
 
                   <li class="mt">
@@ -234,7 +262,7 @@ bottom:50px;
              <!-- </div> -->
              
                     
-					<!-- <div class="row"> -->
+               <!-- <div class="row"> -->
                        <!-- USERS ONLINE SECTION -->
            <div class="memberTable" style="position: absolute;right: 2%;height: 80%;">
            <h3 id="memberTable">TEAM MEMBERS</h3>
@@ -264,6 +292,8 @@ bottom:50px;
          <script src="js/jstorage.js"></script>
         <script type="text/javascript" src="js/owl/owl.carousel.js"></script>  
          <script src="js/logout/logout.js"></script>
+         
+         <script src="js/modal.js"></script>
       
         <script type="text/javascript">
               var keywordNo = sessionStorage.getItem("memberId");
@@ -277,7 +307,56 @@ bottom:50px;
        <script src="assets/js/common-scripts.js"></script>
          
         <script id="boardTrTemplate" type="text/x-handlebars-template">
-         {{#list}}{{#imgTag stoImgName traceNo}}{{/imgTag}}{{/list}}
+         {{#list}}{{#imgTag stoImgName traceNo}}{{/imgTag}}
+      {{/list}}
+       </script>
+       
+       <script id="boardTrTemplateModal" type="text/x-handlebars-template">
+         {{#list}}
+            <!-- Modal -->
+                <div class="modal fade"  id ="myModal{{traceNo}}" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+              <div class="modal-content">
+      
+
+
+                <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="gridSystemModalLabel"><i class="fa fa-picture-o"></i></h4>
+              </div>
+        
+
+
+                 <div class="modal-body like-body">
+                <div class="container" style="width:100%;">
+  
+           <div id="owl-demo" class="owl-carousel owl-theme" value="{{traceNo}}">
+              {{#carouselImg stoImgName traceNo}}{{/carouselImg}}
+             </div>
+
+</div>
+            <a target="_blank" class="w3-btn" id="liketest">좋아요<i class="fa fa-thumbs-o-up"></i></a>
+<div class="text" id="text">
+               {{{text}}}
+
+            </div>
+            </div>
+               
+        
+        
+              <div class="modal-footer">
+                  <div class="modal{{@key}}" margin-top="100px" style="overflow-y:auto; height:150px;" id="footerscroll"></div>
+                  <div id="wtext">   
+                       <div id="{{@key}}" contenteditable="true" style="width: 89%; height: 33px;" class="texteditor"></div>
+                  </div>  
+                  <a target="_blank" class="w3-btn" id="create" value="{{traceNo}}" >등록</a>
+                 </div>
+
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+      {{/list}}
        </script>
        
        <script id="boardTrTemplateBottom" type="text/x-handlebars-template">
@@ -289,7 +368,7 @@ bottom:50px;
       
                   <div class="desc">
                          <div class="thumb">
-                            <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
+                            <img class="imgMember" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg" style="border-radius: 50%;">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
                          </div>
                          <div class="details">
@@ -351,6 +430,152 @@ bottom:50px;
 
          {{/list}}
        </script>
+       
+       <script id="replyTemplate" type="text/x-handlebars-template">
+{{#list}}
+     <div class='first-reply'>
+         <div class='media'>
+            <div class='media-left'>
+               <a href='#'>
+               <img class='media-object' src='img/seon111.jpg' alt='4545' width='45px' height='45px'>
+               </a>
+            </div>
+            <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+            </div>
+        </div>
+     </div>
+{{/list}}      
+</script>
+
+<script id="replyTemplate01" type="text/x-handlebars-template">
+            
+            <div class='commtextarea'style="margin-left:45px">
+            <div class='recommt'>
+            <div id='commt{{@key}}' contenteditable='true' style='width: 88%; height: 33px;' class='commtexteditor'></div>
+            </div>
+            <div>
+            <a target='_blank' class='w3-btn' id='commcreate'>등록</a>
+            </div>
+            </br>
+            </br>
+            </div>
+                 
+</script>
+
+<script id="replyTemplate02" type="text/x-handlebars-template">
+{{#list}}
+<div class='second-reply' style='margin-left:40px;'>
+   <div class='childmedia'>
+       <div class='media-left'>
+          <a href='#'>
+             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+          </a>
+       </div>
+          <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+   </div>
+</div>
+</div>
+{{/list}}
+</script>
+
+
+
+<script id="replyTemplate0101" type="text/x-handlebars-template">
+            
+            <div class='commtextarea'style="margin-left:85px">
+            <div class='recommt'>
+            <div id='commt{{@key}}' contenteditable='true' style='width: 87%; height: 33px;' class='commtexteditor'></div>
+            </div>
+            <div>
+            <a target='_blank' class='w3-btn' id='commcreate2'>등록</a>
+            </div>
+            </br>
+            </br>
+            </div>
+                 
+</script>
+
+<script id="replyTemplate0202" type="text/x-handlebars-template">
+{{#list}}
+<div class='third-reply' style='margin-left:40px;'>
+   <div class='childmedia2'>
+       <div class='media-left'>
+          <a href='#'>
+             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+          </a>
+       </div>
+          <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='child-child-trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+   </div>
+</div>
+</div>
+{{/list}}
+</script>
+
+<script id="replyTemplate11" type="text/x-handlebars-template">
+
+     <div class='first-reply' id='{{commNo}}'>
+         <div class='media'>
+            <div class='media-left'>
+               <a href='#'>
+               <img class='media-object' src='img/seon111.jpg' alt='4545' width='45px' height='45px'>
+               </a>
+            </div>
+            <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+            </div>
+        </div>
+     </div>
+      
+</script>
+
+<script id="replyTemplate0222" type="text/x-handlebars-template">
+
+<div class='second-reply' id='{{commNo}}' style='margin-left:40px;'>
+   <div class='childmedia'>
+       <div class='media-left'>
+          <a href='#'>
+             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+          </a>
+       </div>
+          <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+   </div>
+</div>
+</div>
+
+</script>
+
+<script id="replyTemplate0303" type="text/x-handlebars-template">
+
+<div class='third-reply' id='{{commNo}}'style='margin-left:40px;'>
+   <div class='childmedia2'>
+       <div class='media-left'>
+          <a href='#'>
+             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+          </a>
+       </div>
+          <div class='media-body' value="{{commNo}}">
+         <a id='userId'>{{id}}</a><a id='child-child-pencil' class="fa fa-pencil"></a><a id='child-child-trash' class="fa fa-trash"></a>
+            <p1 class='media-heading'></p1>
+            <p2 id='temp'>{{{comm}}}</p2>
+   </div>
+</div>
+</div>
+
+</script>
        
     <script type="text/javascript">
     $(window).load(function(){

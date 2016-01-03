@@ -310,3 +310,26 @@ $(function(){
 $(".btn-default").on("click", function(){
       location.href="sharemap.html";
 });
+
+$(function(){
+    $.ajax({
+       type:"POST",
+       async: false,
+       headers : 
+       {
+          "Accept" : "application/json",
+          "Content-Type" : "application/json"
+       },
+       data: JSON.stringify
+       ({
+          memberId: keywordNos
+       }),
+       url:"/member/getJsonMember",
+       dataType:"json",
+       success : function(data){
+          $("#centereds").append(data.member.memberId);
+          $(".img-circle").attr("src", "mem_upload/"+data.member.stoImgName);
+
+       }
+    });
+});

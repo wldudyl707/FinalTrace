@@ -46,6 +46,15 @@ $(function() {
 
 					$(div).appendTo("#kky");
 					$("#inputSuccess").text(data.list4[0].text);
+					$("#addr").text(data.list4[0].addr);
+					
+					console.log(data.list4[0]);
+					console.log(data.list4[0]);
+					$("input[name='lat']").val(data.list4[0].latitude);
+					$("input[name='lng']").val(data.list4[0].longtitude);
+					
+					/*$.jStorage.set("wlatitude",data.list4[0].latitude);
+				    $.jStorage.set("wlongtitude",data.list4[0].longtitude);*/
 				});
 
 				/*
@@ -107,7 +116,7 @@ $(function() {
     // //////////////////////////////////수정클릭//////////
 $(document).on("click", "#update", function() {
 
-	alert("뭐");
+	
 	var text = $("#inputSuccess").text();
 	var addr = $("#addr").text();
 	console.log(addr);
@@ -123,8 +132,8 @@ $(document).on("click", "#update", function() {
 		data : JSON.stringify({
 			text : text,
 			traceNo : url,
-			latitude : $.jStorage.get("wlatitude"),
-			longtitude : $.jStorage.get("wlongtitude"),
+			latitude : $("input[name='lat']").val(),
+			longtitude : $("input[name='lng']").val(),
 			addr : addr
 
 		}),

@@ -699,7 +699,7 @@ $(document).on("click",".col-md-4", function(){
 	        	 if(data.replyList[0].replyTrace.traceLikes == 0){
 	        		 var importvalue = replycount.next().children().children().children(".like-body");
 		        	 importvalue.children(".fa").remove();
-	        		 $(importvalue).append("<i class='fa fa-comment' id='commentid'>"+data.replyCount+"</i>");
+	        		 $(importvalue).append("<i class='fa fa-comment' id='commentid'style='float:right'>"+data.replyCount+"</i>");
 	        		 TraceTotalLike(traceNo);
 	        	 }else{
 	        		 
@@ -707,8 +707,8 @@ $(document).on("click",".col-md-4", function(){
 	        	 console.log(data.replyList);
 	        	 var importvalue = replycount.next().children().children().children(".like-body");
 	        	 importvalue.children(".fa").remove();
-	        	 $(importvalue).append("<i class='fa fa-comment' id='commentid'>"+data.replyCount+"</i>");
-	        	 $(importvalue).append("<i class='fa fa-heart' id='likesid'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
+	        	 $(importvalue).append("<i class='fa fa-comment' id='commentid'style='float:right'>"+data.replyCount+"</i>");
+	        	 $(importvalue).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
 	        	 console.log(data.replyList[0].replyTrace.traceLikes);
 	        	 }
 	        	 
@@ -736,7 +736,7 @@ function TraceTotalLike(data){
 	         dataType:"json",
 	         success:function(data){
 	        	 console.log(data);
-	        	 $(".like-body").append("<i class='fa fa-heart' id='likesid'>"+data.liketotal.traceLikes+"</i>");
+	        	 $(".like-body").append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.liketotal.traceLikes+"</i>");
 	        	 
 	        	 
 	        	 
@@ -802,8 +802,8 @@ $(document).on("click", "#liketest", function(){
         		 LikeState(traceNo);
         		 test.children("#likesid").remove();
         		 test.children("#liketest").remove();
-        		 $(test).append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
-        		 $(test).append("<i class='fa fa-heart' id='likesid'>"+data.likes.traceLikes+"</i>");
+        		 $(test).append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down' style='float:right'></i></a>");
+        		 $(test).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.likes.traceLikes+"</i>");
         		 
         		 
         	 }
@@ -863,7 +863,7 @@ $(document).on("click", "#unlike", function(){
         		 test.children("#liketest").remove();
         		 test.children("#unlike").remove();
         		 $(test).append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
-        		 $(test).append("<i class='fa fa-heart' id='likesid'>"+data.likes.traceLikes+"</i>");
+        		 $(test).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.likes.traceLikes+"</i>");
         		 
         		 
         	 }
@@ -921,7 +921,7 @@ $(function(){
     });
 });
 
-/*$(function(){
+$(function(){
 	 $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
 		 //console.log(data.alramcount);
 		 console.log(data.alramlist);
@@ -938,53 +938,52 @@ $(function(){
 		 
 	 });
 	
-});*/
+});
 
 ////////////////////////////////////////친구 상단바 알림//////////////////////////////////////
+$(function(){
+    $.ajax({
+        type:"POST",
+        async: false,
+        headers : 
+        {
+           "Accept" : "application/json",
+           "Content-Type" : "application/json"
+        },
+        data: JSON.stringify
+        ({
+          
+           //friendMemberId : keywordNos
+           friendId : keywordNos
+        }),
+        url:"/friend/listFriend",
+        dataType:"json",
+        success : function(data){
+           /*console.log(data.list[0].friendMember.stoImgName);*/
+          if(data.list.length > 0){
+           for(i=0 ; i<data.list.length ; i++){
+                if(data.list[0].friendState == 1){
+                   var div;
+                     var templateSource = $("#friendTemplate").html();
+                     var template = Handlebars.compile(templateSource);
+                     div = template(data);
+                     
+                     $("#friendList").append(data.listsize);
+                     
+                     /*console.log(div);*/
+                     
+                     $(".friend-header").after(div);
+                }else{
+                   $("#friendList").append("0");
+                }
+             }
+          }else{
+             $("#friendList").append("0");
+          }
 
-/*$(function(){
-$.ajax({
-type:"POST",
-async: false,
-headers : 
-{
-"Accept" : "application/json",
-"Content-Type" : "application/json"
-},
-data: JSON.stringify
-({
-
-//friendMemberId : keywordNos
-friendId : keywordNos
-}),
-url:"/friend/listFriend",
-dataType:"json",
-success : function(data){
-console.log(data.list[0].friendMember.stoImgName);
-if(data.list.length > 0){
-for(i=0 ; i<data.list.length ; i++){
-if(data.list[0].friendState == 1){
-var div;
-var templateSource = $("#friendTemplate").html();
-var template = Handlebars.compile(templateSource);
-div = template(data);
-
-$("#friendList").append(data.listsize);
-
-console.log(div);
-
-$(".friend-header").after(div);
-}else{
-$("#friendList").append("0");
-}
-}
-}else{
-$("#friendList").append("0");
-}
-
-}
-});
-});*/
+        }
+     });
+   });
 /////////////////////////////////수락////////////////////////////////////  
 
 $(document).on("click","#agree",function(){

@@ -79,8 +79,13 @@ function initialize() {
            if( status == google.maps.GeocoderStatus.OK ) {
                console.log("위도"+results[0].geometry.location.lat());
                console.log(results[0].geometry.location.lng());
+               
+               
                $.jStorage.set("wlatitude", results[0].geometry.location.lat());
                $.jStorage.set("wlongtitude", results[0].geometry.location.lng());
+               
+               $("input[name='lat']").val(results[0].geometry.location.lat());
+               $("input[name='lng']").val(results[0].geometry.location.lng());
            }  
            else {  
                alert("Geocoder failed due to: " + status);  

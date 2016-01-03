@@ -9,7 +9,7 @@ function initialize() {
     }
          
    var mapProp = {
-      zoom:15,
+      zoom:17,
       disableDefaultUI:true,
       mapTypeId:google.maps.MapTypeId.ROADMAP
    }
@@ -31,6 +31,8 @@ function initialize() {
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
       
     var markers=[];
+    $.jStorage.set("latitude",null);
+    $.jStorage.set("longtitude",null);
    // Listen for the event fired when the user selects a prediction and retrieve
    // more details for that place.
    searchBox.addListener('places_changed', function(){
@@ -83,6 +85,8 @@ function initialize() {
 }
 
 function moveToPlace(){
+	
+	 deleteMarkers();
    console.log("");
    console.log("여기는 moveToPlaces 들어오자 마자 좌표 날리는 곳");
    console.log($.jStorage.get("latitude"));
@@ -127,12 +131,12 @@ function moveToPlace(){
  	       			imgName = stoImgName.split(",");
  	       			var imgTag='';
  	       	     	if(imgName.length == 1){
- 	       				imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"'></div>";
+ 	       				imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' class='replycount'></div>";
  	       			}
  	       	     	
  	       	     	else if(imgName.length >= 2){
  	       	     		
- 	       				imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);'></div>";
+ 	       				imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);' class='replycount'></div>";
  	       				imgTag += "<div class='count' style='position:absolute; top:15px; right:130%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>";
  	       	     	
  	       	     	}
@@ -140,13 +144,49 @@ function moveToPlace(){
  	       			return imgTag;
  	       			
  	       		});
+            	 
+            	 Handlebars.registerHelper('carouselImg', function(stoImgName) {
+            		 console.log("캐러셀");
+            		 console.log(stoImgName);
+            		 var carouselName = [];
+            		 carouselName = stoImgName.split(",");
+            		 var carouselTag='';
+            		 console.log(carouselName.length)
+            		 if(carouselName.length == 1){
+            		 	carouselTag += "<div class='item active modalItem'>"+
+            		 					"<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400' class='carousel-img'>"+
+            		 					"</div>";
+            		 }
+
+            		 else if(carouselName.length > 1){
+            		 	carouselTag += "<div class='item active modalItem'>"+
+            		 					"<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400'class='carousel-img'>"+
+            		 					"</div>";
+            		 	for(var i=1 ; i<carouselName.length ; i++){
+            		 		carouselTag += "<div class='item modalItem'>"+
+            		 			"<img src='trace_thumb/"+carouselName[i]+"' width='100%' height='400' class='carousel-img'>"+
+            		 			"</div>";
+            		 	}				
+            		 	
+            		 }
+
+            		 return carouselTag;
+
+            		 });  
+            	 
  	       	  
          	  var div;
                var templateSource = $("#boardTrTemplate").html();
                var template = Handlebars.compile(templateSource);
                div = template(data);
-               //$("#owl-demo").children().empty(); 
                $("#owl-demo").append(div);
+               
+               var modal;
+               var templateSource = $("#boardTrTemplateModal").html();
+               var template = Handlebars.compile(templateSource);
+               modal = template(data);
+               //$("#owl-demo").children().empty(); 
+               $("#owl-demo").after(modal);
                	 
                var owl = $("#owl-demo")
              	  owl.owlCarousel({
@@ -158,6 +198,21 @@ function moveToPlace(){
              	    navigation:false,
              	    pagination:false
              	  });
+               
+               $(document).on("click",".item",function() {
+            	   		console.log("sfsf");
+            	   		
+            	   var data = $(this).attr("value");
+            	   console.log(data);
+            	   var owl = $(this).parents("#main-content").find("#myModal"+data).find(".owl-carousel");
+            	   console.log(owl);
+            	   owl.owlCarousel({
+            	     navigation : true,
+            	     singleItem : true,
+            	     transitionStyle : "backSlide"
+            	   });
+
+            	   });
               
               
               var divs;
@@ -701,3 +756,659 @@ $(document).on("click", "#memberTable", function(){
 	   moveToPlace();
 	   
 	});
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////댓글//////////////////////
+$(document).on("click", "#create", function(){
+   
+    
+ var test = $(this).prev().prev().attr('class');
+ var text = $(this).prev().children().attr('id');
+ 
+ var replycount = $(this).parents(".modal-content").find(".fa-comment").text();
+ var replylocation = $(this).parents(".modal-content").find(".fa-comment").attr('id');
+ console.log("ddddddddddddddddddddd"+replylocation);
+ 
+ //console.log(test);
+ //console.log($(this).prev().children().attr('id'));
+ 
+var pos=$(this).position().top;
+
+$(this).prev().prev("#footerscroll").animate({scrollTop:pos},'slow');
+
+      $.ajax({
+            type:"POST",
+            async:false,
+            headers : {
+               "Accept" : "application/json",
+               "Content-Type" : "application/json"
+            },
+            data: JSON.stringify({
+               comm : $(this).prev().children().html(),
+               traceNo : $(this).attr('value'),
+               id : keywordNos,
+               repLevel : "1"
+            }),
+            url:"/reply/jsonAddReply",
+            dataType:"json",
+            success:function(data){
+               alert("왔다");
+               console.log(data);
+               var div;
+               var templateSource = $("#replyTemplate").html();
+               var template = Handlebars.compile(templateSource);
+                console.log(template);
+                div = template(data);
+                
+                $(div).appendTo("."+test).fadeOut().fadeIn();
+                console.log("dddddddddddddss"+replycount);
+                //$(div).appendto(.modal0)
+                var count = (replycount-0)+1;
+                
+                console.log("dddsauwdas"+count);
+                $("#"+text).empty(); 
+                
+                $("#"+replylocation).text(count);
+                //$("#texteditor").html("");
+            
+            }
+         });    
+});
+
+
+$(document).on("click", "#trash", function(){
+	
+	var result = confirm('정말로 삭제 하시겠습니까?');
+
+    if(result) {
+       //yes
+    	var del = $(this).parent().attr('value');
+    	console.log(del);
+    	
+    	var delText = $(this).next().next();
+    	      $.ajax({
+    	            type:"POST",
+    	            headers : {
+    	               "Accept" : "application/json",
+    	               "Content-Type" : "application/json"
+    	            },
+    	            data: JSON.stringify({
+    	               commNo : del    
+    	            }),
+    	            
+    	            url:"/reply/jsonDeleteReply",
+    	            dataType:"json",
+    	            success:function(data){
+    	            	
+    	            
+    	            if(data.result == '1'){
+    	            delText.text("삭제된 댓글입니다.");
+    	            }else{
+    	            	console.log("실패했쪙");
+    	            }
+    	            	
+    	            }
+    	         });    
+    	      
+    } else {
+       //no
+    }
+	
+	
+	});
+	
+	
+	
+	
+////////////////////////댓글의 댓글//////////////////////////
+$(document).on("click", "#pencil" , function() {
+   $(this).parent().parent().parent().parent().parent().children("#wtext").children(".texteditor").hide();
+   $(this).parent().parent().parent().parent().parent().children("#wtext").next().hide();
+   $(".commtextarea").remove();
+   
+  
+    var parent = $(this).parent().parent().parent();
+    
+    console.log(parent);
+    
+    
+    var templateSource = $("#replyTemplate01").html();
+    var template = Handlebars.compile(templateSource);
+    
+    console.log(template);
+
+    //$(div).appendTo(parent);
+     
+    parent.after(template); 
+});
+
+
+$(document).on("click", "#commcreate", function(){
+   console.log("클릭을 합시다 이야이야호");
+   var test2 = $(this).parent().parent().attr('class');
+   var buttons = $(this).attr('id');
+   var test3 = $(this).parent().parent().prev();
+   var displaybar = $(this).parent().parent().parent().parent().children('#create').attr('class');
+   var displaytext = $(this).parent().parent().parent().parent().children('#wtext').children().attr('class');
+   var commNo = $(this).parent().parent().prev().children('.media').children('.media-body').attr('value');
+   console.log(commNo);
+   
+   var cdcd = $(this).parent().parent().prev().children();
+   var i = cdcd.length;
+   console.log(cdcd);
+    console.log(i);
+   //console.log(displaybar);
+   //console.log(displaytext);
+   
+   
+   
+    $.ajax({
+   
+       type:"POST",
+         async:false,
+         headers : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+         },
+         data: JSON.stringify({
+             comm : $(this).parent().parent().children('.recommt').children('.commtexteditor').html(),
+             traceNo : $(this).parents('.modal-content').find('.owl-carousel').attr("value"),
+             repNo : commNo,
+             repLevel : "2",
+             id : keywordNos
+          }),
+          url:"/reply/jsonAddReply",
+          dataType:"json",
+          success:function(data){
+             console.log("왔어욤");
+             console.log(data);
+           var test;
+              var templateSource = $("#replyTemplate02").html();
+              var template = Handlebars.compile(templateSource);
+              
+              test = template(data);        
+              
+              $(test).appendTo(test3).fadeOut().fadeIn();
+              
+              $("."+test2).remove();
+              //$("."+displaybar).attr("style", "display");
+              //$("."+displaytext).attr("style", "display; width:70%; height:50px");
+              $("."+displaybar).show(500);
+              $("."+displaytext).show(500);
+          }
+   }); 
+      
+});
+
+$(document).on("click", "#child-trash", function(){
+	
+	var result = confirm('정말로 삭제 하시겠습니까?');
+
+    if(result) {
+       //yes
+    	var del = $(this).parent().attr('value');
+    	console.log(del);
+    	
+    	var delText = $(this).next().next();
+    	      $.ajax({
+    	            type:"POST",
+    	            headers : {
+    	               "Accept" : "application/json",
+    	               "Content-Type" : "application/json"
+    	            },
+    	            data: JSON.stringify({
+    	               commNo : del    
+    	            }),
+    	            
+    	            url:"/reply/jsonDeleteReply",
+    	            dataType:"json",
+    	            success:function(data){
+    	            	
+    	            
+    	            if(data.result == '1'){
+    	            delText.text("삭제된 댓글입니다.");
+    	            }else{
+    	            	console.log("실패했쪙");
+    	            }
+    	            	
+    	            }
+    	         });    
+    	      
+    } else {
+       //no
+    }
+	
+	
+	});
+
+
+
+////////////////////////댓글의 댓글의 댓글//////////////////////////
+$(document).on("click", "#child-pencil" , function() {
+      $(this).parent().parent().parent().parent().parent().parent().children("#wtext").children(".texteditor").hide();
+      $(this).parent().parent().parent().parent().parent().parent().children("#wtext").next().hide();
+      $(".commtextarea").remove();
+      
+     
+       var parent = $(this).parent().parent().parent();
+       
+       console.log(parent);
+       
+       
+       var templateSource = $("#replyTemplate0101").html();
+       var template = Handlebars.compile(templateSource);
+       
+       console.log(template);
+
+       //$(div).appendTo(parent);
+        
+       parent.after(template); 
+   });
+   
+
+$(document).on("click", "#commcreate2", function(){
+   console.log("클릭을 합시다 이야이야호");
+   var test2 = $(this).parent().parent().attr('class');
+   var buttons = $(this).attr('id');
+   var test3 = $(this).parent().parent().prev();
+   var displaybar = $(this).parent().parent().parent().parent().parent().children('#create').attr('class');
+   var displaytext = $(this).parent().parent().parent().parent().parent().children('#wtext').children().attr('class');
+   var commNo = $(this).parent().parent().prev('.second-reply').children('.childmedia').children('.media-body').attr('value');
+   console.log("dddd"+$(this).parent().parent().parent().parent().parent().parent().children('.modal-body').children("#test").attr('value'));
+   console.log(commNo);
+   console.log(test3);
+  
+   
+   
+   
+    $.ajax({
+   
+       type:"POST",
+         async:false,
+         headers : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+         },
+         data: JSON.stringify({
+             comm : $(this).parent().parent().children('.recommt').children('.commtexteditor').html(),
+             traceNo : $(this).parents('.modal-content').find('.owl-carousel').attr("value"),
+             repNo : commNo,
+             repLevel : "3",
+             id : keywordNos
+          }),
+          url:"/reply/jsonAddReply",
+          dataType:"json",
+          success:function(data){
+             console.log("왔어욤");
+             console.log(data);
+           var test;
+              var templateSource = $("#replyTemplate0202").html();
+              var template = Handlebars.compile(templateSource);
+              
+              test = template(data);        
+              
+              $(test).appendTo(test3).fadeOut().fadeIn();
+              
+              $("."+test2).remove();
+              //$("."+displaybar).attr("style", "display");
+              //$("."+displaytext).attr("style", "display; width:70%; height:50px");
+              $("."+displaybar).show(500);
+              $("."+displaytext).show(500);
+          }
+   }); 
+      
+});
+
+
+$(document).on("click", "#child-child-trash", function(){
+	
+	var result = confirm('정말로 삭제 하시겠습니까?');
+
+    if(result) {
+       //yes
+    	var del = $(this).parent().attr('value');
+    	console.log(del);
+    	
+    	var delText = $(this).next().next();
+    	      $.ajax({
+    	            type:"POST",
+    	            headers : {
+    	               "Accept" : "application/json",
+    	               "Content-Type" : "application/json"
+    	            },
+    	            data: JSON.stringify({
+    	               commNo : del    
+    	            }),
+    	            
+    	            url:"/reply/jsonDeleteReply",
+    	            dataType:"json",
+    	            success:function(data){
+    	            	
+    	            
+    	            if(data.result == '1'){
+    	            delText.text("삭제된 댓글입니다.");
+    	            }else{
+    	            	console.log("실패했쪙");
+    	            }
+    	            	
+    	            }
+    	         });    
+    	      
+    } else {
+       //no
+    }
+	
+	
+	});
+
+
+
+
+$(document).on("click",".item", function(){
+	console.log("댓글가져오기여기오나요");
+	var data = $(this).attr("value");
+	console.log(data);
+	var rep = $(this).parents("#main-content").find("#myModal"+data).find("#create");
+	var repCh = $(this).parents("#main-content").find("#myModal"+data).find("#commcreate");
+	var repChCh = $(this).parents("#main-content").find("#myModal"+data).find("#commcreate2");
+	//console.log(owl);
+
+	$(this).parents("#main-content").find("#myModal"+data).find("#create").click(function(){
+		
+		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+	});
+	
+	$(this).parents("#main-content").find("#myModal"+data).find("#commcreate").click(function(){
+		
+		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+	});
+	
+	$(this).parents("#main-content").find("#myModal"+data).find("#commcreate2").click(function(){
+		
+		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+	});
+	
+   
+    if($(this).attr('role')== 'true'){
+      
+	  //$(this).next().children().children().children(".modal-footer").children("#footerscroll").children.remove();
+	   
+      var tttt = $(this).children();
+      console.log("내가 선택한 것만");
+      console.log(tttt);
+      console.log($(this).attr('value'));
+      console.log($(this).next().children().children().children(".modal-footer").attr("class"));
+      var traceNo = $(this).attr('value');
+      var importtext = $(this).parents("#main-content").find("#myModal"+data).find(".modal-footer").children("#footerscroll").attr("class");
+      var im = $(this).parents("#main-content").find("#myModal"+data).find(".modal-footer").children("#footerscroll");
+      //console.log($(this).next().children().children().children(".modal-footer").children("#footerscroll"));
+   $.ajax({
+      type:"POST",
+        async:false,
+        headers : {
+           "Accept" : "application/json",
+           "Content-Type" : "application/json"
+        },
+        data: JSON.stringify({
+         traceNo : traceNo
+         }),
+         url:"/reply/jsonListReply",
+         dataType:"json",
+         success:function(data){
+            console.log(data.list);
+           for(var i = 0; i < data.list.length; i++){
+              console.log(data.list[i].repLevel);
+              if(data.list[i].repLevel == 1){
+                 console.log("data");
+                 var div;
+                    var templateSource = $("#replyTemplate11").html();
+                    var template = Handlebars.compile(templateSource);
+                    console.log(template);
+                    div = template(data.list[i]);
+                    $(div).appendTo("."+importtext).fadeOut().fadeIn();
+                    //$(div).appendTo("#"+data.list[i].commNo).fadeOut().fadeIn();
+                    //$(tttt).attr("class","false");
+              }else if(data.list[i].repLevel == 2){
+                 console.log(im.children().attr("class"));
+                 var test;
+                    var templateSource = $("#replyTemplate0222").html();
+                    var template = Handlebars.compile(templateSource);
+                    
+                    test = template(data.list[i]);        
+                    //data.list[i].repNo
+                    //var abc = data.list[i].repNo;
+                    //console.log(abc);
+                    $(test).appendTo(im.children("#"+data.list[i].repNo)).fadeOut().fadeIn();
+                    
+              }else if(data.list[i].repLevel ==3){
+                 console.log(im.children('.second-reply').attr("class"));
+                 
+                 var test;
+                    var templateSource = $("#replyTemplate0303").html();
+                    var template = Handlebars.compile(templateSource);
+                    
+                    test = template(data.list[i]);
+                    //$(test).appendTo(im.children()).fadeOut().fadeIn();
+                    $(test).appendTo(im.children(".first-reply").children("#"+data.list[i].repNo)).fadeOut().fadeIn();
+              }
+           }
+         }
+      });
+    }  
+});
+
+$(document).on("click", ".replycount", function(){
+	var traceNo = $(this).attr("value");
+	console.log("dksdiwndiwk"+traceNo);
+	var replycount = $(this);
+	getLikeState(traceNo);
+	
+	$.ajax({
+	      type:"POST",
+	        headers : {
+	           "Accept" : "application/json",
+	           "Content-Type" : "application/json"
+	        },
+	        data: JSON.stringify({
+	        	traceNo : traceNo
+	         }),
+	         url:"/reply/getReply",
+	         dataType:"json",
+	         success:function(data){
+	        	 if(data.replyList[0].replyTrace.traceLikes == 0){
+	        		 var importvalue = replycount.parents("#main-content").find("#myModal"+traceNo).find(".like-body");
+	        		 console.log("ddddddddddddddddddd"+importvalue);
+		        	 importvalue.children(".fa").remove();
+	        		 $(importvalue).append("<i class='fa fa-comment' id='commentid' style='float:right'>"+data.replyCount+"</i>");
+	        		 TraceTotalLike(traceNo);
+	        	 }else{
+	        		 
+	        	 
+	        	 console.log(data.replyList);
+	        	 var importvalue = replycount.parents("#main-content").find("#myModal"+traceNo).find(".like-body");
+	        	 importvalue.children(".fa").remove();
+	        	 $(importvalue).append("<i class='fa fa-comment' id='commentid' style='float:right'>"+data.replyCount+"</i>");
+	        	 $(importvalue).append("<i class='fa fa-heart' id='likesid' style='float:right'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
+	        	 console.log(data.replyList[0].replyTrace.traceLikes);
+	        	 }
+	        	 
+	        	 
+	        	 
+	         }
+	 });
+	
+	function TraceTotalLike(data){
+		$.ajax({
+		      type:"POST",
+		        async:false,
+		        headers : {
+		           "Accept" : "application/json",
+		           "Content-Type" : "application/json"
+		        },
+		        data: JSON.stringify({
+		        	traceNo : data
+		         }),
+		         url:"/trace/likeTotal",
+		         dataType:"json",
+		         success:function(data){
+		        	 console.log(data);
+		        	 $(".like-body").append("<i class='fa fa-heart' id='likesid' style='float:right'>"+data.liketotal.traceLikes+"</i>");
+		        	 
+		        	 
+		        	 
+		         }
+		 });
+	}
+	 
+});
+
+//////////////////////////사용자 별 좋아요 확인//////////////////////
+function getLikeState(data){
+	console.log("짜증나~~~~~~"+data);
+	$.ajax({
+		type:"POST",
+		headers : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+         },
+		url:"/like/getLikeState",
+		dataType:"json",
+		data: JSON.stringify({
+	        traceNo : data,
+	        id: keywordNos,
+	    }),
+		success : function(data){
+			console.log(data);
+			if(data.likeState[0].likeState == 1){
+				console.log("dddd");
+			$(".like-body").children(".w3-btn").remove();
+			$(".like-body").children(".fa fa-thumbs-o-up").remove();
+			$(".like-body").append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
+			
+			}else{
+				$(".like-body").children(".w3-btn").remove();
+				$(".like-body").children(".fa fa-thumbs-o-up").remove();
+			$(".like-body").append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
+			}
+		}
+	});
+	
+}
+
+
+$(document).on("click", "#liketest", function(){
+	//console.log("들어왔다!!!! 씐난다!!!!");
+	console.log($(this).parent().find(".owl-carousel").attr("value"));
+	var traceNo = $(this).parent().find(".owl-carousel").attr("value");
+	var test = $(this).parent();
+	$.ajax({
+		type:"POST",
+        async:false,
+        headers : {
+           "Accept" : "application/json",
+           "Content-Type" : "application/json"
+        },
+        data: JSON.stringify({
+        	traceNo : traceNo
+         }),
+         url:"/trace/updateLikes",
+         dataType:"json",
+         success:function(data){
+        	 if(data.result==1){
+        		 alert("업데이트 완료!!!");
+        		 LikeState(traceNo);
+        		 test.children("#likesid").remove();
+        		 test.children("#liketest").remove();
+        		 $(test).append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
+        		 $(test).append("<i class='fa fa-heart' id='likesid' style='float:right'>"+data.likes.traceLikes+"</i>");
+        		 
+        		 
+        	 }
+         }
+	});
+	
+});
+
+/////////////////////좋아요 insert//////////////////////
+function LikeState(data){
+	console.log(data);
+	console.log(keywordNos);
+	$.ajax({
+		type:"POST",
+		headers : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+         },
+		url:"/like/addLikeState",
+		dataType:"json",
+		data: JSON.stringify({
+	        traceNo : data,
+	        id: keywordNos,
+	        likeState: 1
+	    }),
+		success : function(data){
+			if(data.result == "1"){
+				console.log("ddddd");
+			}
+		}
+	});
+}
+
+$(document).on("click", "#unlike", function(){
+	console.log("들어왔다!!!! 씐난다!!!!");
+	console.log($(this).parent().find(".owl-carousel").attr("value"));
+	var traceNo = $(this).parent().find(".owl-carousel").attr("value");
+	var test = $(this).parent();
+	
+	updateLikeState(traceNo);
+	$.ajax({
+		type:"POST",
+        async:false,
+        headers : {
+           "Accept" : "application/json",
+           "Content-Type" : "application/json"
+        },
+        data: JSON.stringify({
+        	traceNo : traceNo
+         }),
+         url:"/trace/updateunLikes",
+         dataType:"json",
+         success:function(data){
+        	 if(data.result==1){
+        		 alert("업데이트 완료!!!");
+        		 test.children("#likesid").remove();
+        		 test.children("#liketest").remove();
+        		 test.children("#unlike").remove();
+        		 $(test).append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
+        		 $(test).append("<i class='fa fa-heart' id='likesid' style='float:right'>"+data.likes.traceLikes+"</i>");
+        		 
+        		 
+        	 }
+         }
+	});
+});
+
+/////////////////////좋아요 삭제//////////////////////
+function updateLikeState(data){
+	
+	$.ajax({
+		type:"POST",
+		headers : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+         },
+		url:"/like/updateLikeState",
+		dataType:"json",
+		data: JSON.stringify({
+	        traceNo : data,
+	        id: keywordNos
+	    }),
+		success : function(data){
+			if(data.upResult == 1){
+				console.log("성공");
+			}
+		}
+	});
+	
+}

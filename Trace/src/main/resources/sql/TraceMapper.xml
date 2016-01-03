@@ -105,7 +105,7 @@
    
     <select id="getTraceList2" parameterType="int" resultMap="traceSelectMap">
    SELECT
-   trace_no, original_img_name, trace_like, id, trace_img_name ,addr ,text
+   trace_no, original_img_name, trace_like, id, trace_img_name ,addr ,text ,latitude,longtitude
    FROM trace
    WHERE trace_no =#{value}
    </select>

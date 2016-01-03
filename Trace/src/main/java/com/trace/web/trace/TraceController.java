@@ -92,7 +92,7 @@ public class TraceController {
 						new FileOutputStream(filePath + genId + extName));
 				
 				Thumbnails.of(new File(filePath+genId+extName))
-							.size(300, 300)
+							.size(1000, 1000)
 							.toFiles(new File(thumbPath), Rename.NO_CHANGE);
 			}catch(IOException e){
 				e.printStackTrace();
@@ -215,6 +215,9 @@ public class TraceController {
 		
 		Trace trace3 = new Trace();
 		trace3.setText(map.getText());
+		trace3.setAddr(map.getAddr());
+		trace3.setLatitude(map.getLatitude());
+		trace3.setLongtitude(map.getLongtitude());
 		newlist2.add(trace3);
 		
 		String[] image = map.getStoImgName().split(",");
