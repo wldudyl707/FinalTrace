@@ -22,7 +22,7 @@
     <link href="assets/css/style-responsive.css" rel="stylesheet">
     
     <!-- <link rel="stylesheet" href="css/trace/write.css"> -->
-      
+    <link href="css/style.css" rel="stylesheet">
     <link href="assets/css/googlemap.css" rel="stylesheet" type="text/css">
       
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -35,9 +35,20 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-    
-    <style>
- 
+      <style>
+   #inputSuccess{
+   overflow-y:auto; 
+   }
+   
+.form-horizontal .form-group {
+  margin-right: -1px;
+  margin-left: -2px;
+}
+/*      .img-circle {
+    width: 100%;
+    margin-top: -6%;
+    height: 200px;
+} */
         #share-img{
            box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2); 
             border: 3px solid white;
@@ -90,20 +101,20 @@
           background-color: #37474f !important;
           border-bottom: 0px;
       }
-     .fa-times:before {
-    position: absolute;
-    margin-top: -14px;
-    margin-left: -10px;
-}
+      .fa-times:before {
+           position: absolute;
+          margin-top: -16px;
+          margin-left: -10px;
+      } 
       
-   #sidebar {
-    width: 210px;
+   /*  #sidebar {
+     width: 210px;
     height: 100%;
-    position: fixed;
+    position: fixed; 
     background: #263238;
-   }
+   }  */
    
-   .wrapper {
+.wrapper {
     display: inline-block;
     margin-top: 60px;
     padding-left: 15px;
@@ -111,15 +122,9 @@
     padding-bottom: 15px;
     padding-top: 0px;
     width: 90%;
-    background-color: beige;
-    border-radius: 10px;
     margin-top: 6%;
-    border-style: ridge;
-    border-bottom-width: thick;
-    border-top-width: thick;
-    border-left-width: thick;
-    border-right-width: thick;
-   }
+  
+}
    #main-content {
     margin-left: 210px;
     text-align: center;
@@ -129,7 +134,7 @@
     background: #ffffff;
     margin: 10px;
     padding: 10px;
-    border-style: double;
+    /* border-style: double; */
     /* box-shadow: 0px 3px 2px #aab2bd; */
    }
    
@@ -142,19 +147,12 @@
     position: relative;
     padding : 0px;
    }
-/* .img-circle {
-    width: 100%;
-    margin-top: -6%;
-    height: 200px;
-} */
-/* .form-horizontal .form-group {
-  margin-right: -1px;
-  margin-left: -2px;
-} */
+
+
     </style>
     
   
-  <body>
+  <body style=" background-color: #e9e9e9;">
 
   <section id="container" >
       <!-- **********************************************************************************************************************************************************
@@ -206,9 +204,7 @@
                 <ul class="nav pull-right top-menu">
                     <li><a class="logout" id="myBtn">Logout</a></li>
                </ul>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="index.html">register</a></li>
-               </ul>
+               
             </div>
         </header>
 
@@ -290,7 +286,7 @@
                                   <div class="col-lg-12">
                                       <!--<input type="text" class="form-control" id="inputSuccess">-->
                                       <div class="form-contorl" id="inputSuccess" contenteditable="true"
-                                           style="font-size: 20px; height:300px; border:1px solid #66b2ff" ></div>
+                                           style="font-size: 20px; height:300px; border: 1px solid #C2C6C9;" ></div>
                                       <center><strong id="addr"></strong></center>
                                       <input type="hidden" value="" name="lat"/>
                                       <input type="hidden" value="" name="lng"/>
@@ -312,12 +308,12 @@
                                   
                                   <div class="col-lg-12">
                                       <div class="write-btn">
-                              <button type="submit" class="btn btn-theme">취소</button>
+                              <button type="submit" class="btn btn-theme">Cencel</button>
                               <!-- <p1><label for="fileupload" class="fa fa-camera-retro"></label></a>
                               <input name ="files" class="imagesname" type="file" id="fileupload" style="display:none" multiple> 
                               </p1> -->
                                <p1><a href="#mapmodals" data-toggle="modal" role="button"><i class="fa fa-map-marker" id="marker"></i></a></p1>
-                              <button type="submit" class="btn btn-theme" id="update">수정</button>
+                              <button type="submit" class="btn btn-theme" id="update">Seve</button>
                               </div>
             
                                       
@@ -399,40 +395,40 @@
    <script id="boardTrTemplate4" type="text/x-handlebars-template">
  
    {{#list3}}
-				
+            
                <img src="trace_thumb/{{stoImgName}}" value="{{traceNo}}" width="150px%" height="150px" class="true" id="multi"
-				style="margin-right: 10px;margin-top: 5px">
+            style="margin-right: 10px;margin-top: 5px">
                <div class="fa fa-times" style="margin-bottom:150px">
-				</div>
+            </div>
               
 {{/list3}}
 </script>
 
 <script id="alramTemplate" type="text/x-handlebars-template">
-		{{#alramlist}}
-					
-						<li>
+      {{#alramlist}}
+               
+                  <li>
                                 <a href="index.html#">
                                     <span class="photo"><img alt="avatar" src="mem_thumb/{{replyMember.stoImgName}}" id="photos"></span>
                                     <span class="subject">
                                     <span class="from">{{replyMember.memberId}}님이 회원님의 <br>댓글에 답글을 남겼습니다.</span>
                                     </span>
-								
+                        
                                     <span class="message">
                                         {{comm}}
                                     </span>
-									<span class="time">{{commDate}}</span>
-									
+                           <span class="time">{{commDate}}</span>
+                           
                                 </a>
                             </li>
 
-		{{/alramlist}}
-		</script>
-		
-		<script id="boardTrTemplate2" type="text/x-handlebars-template">
+      {{/alramlist}}
+      </script>
+      
+      <script id="boardTrTemplate2" type="text/x-handlebars-template">
          {{#list}}
-   	
-						<div class="desc">
+      
+                  <div class="desc">
                          <div class="thumb">
                             <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
@@ -444,9 +440,9 @@
                             </p>
                          </div>
                          <div class="buttons">
- 							<i class="fa fa-user-plus fa-lg"></i>                           
+                      <i class="fa fa-user-plus fa-lg"></i>                           
                             <i class="fa fa-picture-o fa-lg"></i>
-							
+                     
                          </div>
                       </div>
 
@@ -455,21 +451,21 @@
         
         <script id="boardTrTemplate2" type="text/x-handlebars-template">
          {{#list}}
-   	
-						<div class="desc">
+      
+                  <div class="desc">
                          <div class="thumb">
                             <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
                          </div>
                          <div class="details">
-							<input type="hidden" class="traceNo" value="{{traceNo}}">
+                     <input type="hidden" class="traceNo" value="{{traceNo}}">
                             <p>{{member.memberId}}<br/>
                                <a href="#">{{addr}}</a><br/>
                                <muted>{{tracedate}}</muted>
                             </p>
                          </div>
                          <div class="buttons" id="{{friend.friendState}}">
- 							<i class="fa fa-user-plus fa-lg {{member.memberId}}" id="{{member.memberId}}"></i>                           
+                      <i class="fa fa-user-plus fa-lg {{member.memberId}}" id="{{member.memberId}}"></i>                           
                             <i class="fa fa-picture-o fa-lg"></i>
                          </div>
                       </div>
@@ -479,8 +475,8 @@
         
         <script id="friendTemplate" type="text/x-handlebars-template">
          {{#list}}
-   	
-						<li class="agreeFriend">
+      
+                  <li class="agreeFriend">
                                 <a>
                                     <span class="photo"><img alt="avatar" src="mem_thumb/{{friendMember.stoImgName}}"></span>
                                     <span class="subject">
@@ -491,7 +487,7 @@
                                     <!-- "fa fa-smile-o"
                                     "fa fa-frown-o" -->
                                     <span class="message">
-                                       	님에게 친구 요청이 왔습니다.
+                                          님에게 친구 요청이 왔습니다.
                                     </span>
                                 </a>
                        </li>

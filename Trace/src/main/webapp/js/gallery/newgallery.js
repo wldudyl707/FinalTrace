@@ -7,14 +7,46 @@ var keywordNos = JSON.parse(keywordNo);
 
 //수정///////////////////////////////
   $(document).on("click",".btn-theme", function() {
-	  
+     
       var temp = $(this).parents(".desc").attr('val');
       console.log(temp);
        location.href = "write3.html?traceNo="+temp;
   });
 //////////////////////////////////////////////////
 
+ /* $(function(){
+      console.log("keywordNos : "+keywordNos);
+       var memberId = $(location).attr('href').split("?")[1].split("=")[1];
+       console.log("안녕"+memberId);
+      
+       
+       $.getJSON('/trace/listTrace',{memberId : memberId}, function(obj){
+          console.log(obj);
+             
+             var div;
+             var templateSource = $("#boardTrTemplate").html();
+             var template = Handlebars.compile(templateSource);
+             div = template(obj);
+             
+             
+             var divs;
+             var templateSource2 = $("#searchTemplate").html();
+             var template2 = Handlebars.compile(templateSource2);
+             divs = template2(obj);
+             
+             $(divs).appendTo("#addr");
+             $("#addTr").append(div).hide().show( "slide", {direction: "left" }, 1000 );
+             
+             
+             for(var i =0; i < obj.list2.length; i++){
+                if(obj.list2[i].member.memberId != keywordNos){
+                   $(".updateClass").remove();
+                }
+             }
 
+       });
+
+   });*/
                
 //////////////////calendar////////////////////   
 $(function() {
@@ -27,51 +59,56 @@ $(function() {
 
 ///////////////gallery///////////////////////////////
 $(function() {
+   
+ var memberId = $(location).attr('href').split("?")[1].split("=")[1];
+ console.log("안녕"+memberId);
 
-$.getJSON('/trace/listTrace',{memberId : keywordNos}, function(obj){
+$.getJSON('/trace/listTrace',{memberId : memberId}, function(obj){
 
-Handlebars.registerHelper('imgTag', function(stoImgName, traceNo) {
-console.log("스토어이미지네임");
-console.log(stoImgName);
-console.log(traceNo);
-var imgName = [];
-imgName = stoImgName.split(",");
-var imgTag='';
-if(imgName.length == 1){
-	imgTag = "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='350' id='share-img'>";
-}
+	Handlebars.registerHelper('imgTag', function(stoImgName, traceNo) {
+		console.log("스토어이미지네임");
+		console.log(stoImgName);
+		console.log(traceNo);
+		var imgName = [];
+		imgName = stoImgName.split(",");
+		var imgTag='';
+		var imgCount = imgName.length - 1;
+		var imgCount2 = imgName.length - 3;
+		if(imgName.length == 1){
+			imgTag = "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount+"' value='"+traceNo+"' width='100%' height='350' id='share-img'>";
+		}
 
-else if(imgName.length == 2){
-	for(var i=0 ; i<imgName.length ; i++){
-	imgTag += "<img src='trace_thumb/"+imgName[i]+"' value='"+traceNo+"' width='100%' height='175' id='share-img'>";
-	}
-}
+		else if(imgName.length == 2){
 
-else if(imgName.length == 3){
-	
-	imgTag += "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='220' id='share-img'>";
-	for(var i=1 ; i<3 ; i++){
-		imgTag += "<img src='trace_thumb/"+imgName[i]+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
-		
-	}
-	//imgTag += "<div class='count' style='position:absolute; top:57%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+6</div>"
-}
+			imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount+"' value='"+traceNo+"' width='100%' height='350' id='share-img' " +
+			"style='-webkit-filter:grayscale(50%);-moz-filter: grayscale(50%);-ms-filter: grayscale(50%);-o-filter: grayscale(50%);filter: grayscale(50%);'>";
+			//imgTag += "<div class='count' style='position:absolute; top:73%; right:7%; font-size:413%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>"
+		}
 
-else if(imgName.length > 3){
-	
-	imgTag += "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='220' id='share-img'>";
-	
-	imgTag += "<img src='trace_thumb/"+imgName[1]+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
-	
-	imgTag += "<img src='trace_thumb/"+imgName[2]+"' value='"+traceNo+"' width='50%' height='130' id='share-img' " +
-				"style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);'>";
+		else if(imgName.length == 3){
+			
+			imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount2+"' value='"+traceNo+"' width='100%' height='220' id='share-img' style='margin-bottom: -4px;'>";
+			for(var i=1 ; i<3 ; i++){
+				imgTag += "<img src='trace_thumb/"+imgName[i]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
+				
+			}
+			//imgTag += "<div class='count' style='position:absolute; top:57%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+6</div>"
+		}
 
-	imgTag += "<div class='count' style='position:absolute; top:66%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-3)+"</div>"
-}
+		else if(imgName.length > 3){
+			
+			imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount2+"' value='"+traceNo+"' width='100%' height='220' id='share-img' style='margin-bottom: -4px;'>";
+			
+			imgTag += "<img src='trace_thumb/"+imgName[1]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
+			
+			imgTag += "<img src='trace_thumb/"+imgName[2]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
 
-return imgTag;
+			//imgTag += "<div class='count' style='position:absolute; top:66%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-3)+"</div>"
+		}
 
-});
+		return imgTag;
+
+		});
 
 Handlebars.registerHelper('carouselImg', function(stoImgName) {
 console.log("캐러셀");
@@ -81,21 +118,21 @@ carouselName = stoImgName.split(",");
 var carouselTag='';
 console.log(carouselName.length)
 if(carouselName.length == 1){
-	carouselTag += "<div class='item active'>"+
-					"<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400' class='carousel-img'>"+
-					"</div>";
+   carouselTag += "<div class='item active'>"+
+               "<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400' class='carousel-img'>"+
+               "</div>";
 }
 
 else if(carouselName.length > 1){
-	carouselTag += "<div class='item active'>"+
-					"<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400'class='carousel-img'>"+
-					"</div>";
-	for(var i=1 ; i<carouselName.length ; i++){
-		carouselTag += "<div class='item'>"+
-			"<img src='trace_thumb/"+carouselName[i]+"' width='100%' height='400' class='carousel-img'>"+
-			"</div>";
-	}				
-	
+   carouselTag += "<div class='item active'>"+
+               "<img src='trace_thumb/"+carouselName[0]+"' width='100%' height='400'class='carousel-img'>"+
+               "</div>";
+   for(var i=1 ; i<carouselName.length ; i++){
+      carouselTag += "<div class='item'>"+
+         "<img src='trace_thumb/"+carouselName[i]+"' width='100%' height='400' class='carousel-img'>"+
+         "</div>";
+   }            
+   
 }
 
 return carouselTag;
@@ -119,7 +156,7 @@ $("#addTr").append(div);
 
 for(var i =0; i < obj.list.length; i++){
 if(obj.list[i].member.memberId != keywordNos){
-	$(".updateClass").remove();
+   $(".updateClass").remove();
 }
 }
 
@@ -134,6 +171,30 @@ owl.owlCarousel({
 });
 
 });
+
+$(document).on("mouseenter",".col-md-4",function() {
+	$(this).attr("style","-webkit-filter:grayscale(70%);-moz-filter: grayscale(70%);-ms-filter: grayscale(70%);-o-filter: grayscale(70%);filter: grayscale(70%);");
+	
+	var ch = $(this).children().first().attr("name");
+	
+	if($(this).children().attr("name") == 1){
+		
+		$(this).children().last().after("<div class='count' style='position:absolute; top:70%; right:7%; font-size:500%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+	}
+	
+	else if($(this).children("img").attr("name") > 1){
+		
+		$(this).children("img").after("<div class='count' style='position:absolute; top:70%; right:7%; font-size:500%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+	}
+	
+	
+});
+
+$(document).on("mouseleave",".col-md-4",function() {
+	$(this).attr("style","none");
+	$(this).find(".count").remove();
+});
+
 });
 });
 
@@ -141,7 +202,11 @@ owl.owlCarousel({
 //////////////////gallery2//////////////////////////////////////
  $(function() {
     $(document).on("click","#reply", function() {
-       location.href = 'gallery.html';
+    //   location.href = 'newgallery.html';
+    	var id =$(location).attr('href').split("?")[1].split("=")[1];
+    	
+    	 location.href="newgallery.html?memberId="+id ;
+       
     /*$.getJSON('/trace/listTrace',{memberId : keywordNos }, function(obj){
        var div;
        var templateSource = $("#boardTrTemplate").html();
@@ -190,7 +255,7 @@ owl.owlCarousel({
             dataType:"json",
             success:function(data){
                $.getJSON('/trace/listTrace2',{memberId : keywordNos }, function(obj){
-                 alert("왔다");
+               /*  alert("왔다");*/
                  console.log(data);
                  var div;
                  var templateSource = $("#boardTrTemplate3").html();
@@ -276,7 +341,6 @@ $(this).prev().prev("#footerscroll").animate({scrollTop:pos},'slow');
             url:"/reply/jsonAddReply",
             dataType:"json",
             success:function(data){
-               alert("왔다");
                console.log(data);
                var div;
                var templateSource = $("#replyTemplate").html();
@@ -301,49 +365,49 @@ $(this).prev().prev("#footerscroll").animate({scrollTop:pos},'slow');
 
 
 $(document).on("click", "#trash", function(){
-	
-	var result = confirm('정말로 삭제 하시겠습니까?');
+   
+   var result = confirm('정말로 삭제 하시겠습니까?');
 
     if(result) {
        //yes
-    	var del = $(this).parent().attr('value');
-    	console.log(del);
-    	
-    	var delText = $(this).next().next();
-    	      $.ajax({
-    	            type:"POST",
-    	            headers : {
-    	               "Accept" : "application/json",
-    	               "Content-Type" : "application/json"
-    	            },
-    	            data: JSON.stringify({
-    	               commNo : del    
-    	            }),
-    	            
-    	            url:"/reply/jsonDeleteReply",
-    	            dataType:"json",
-    	            success:function(data){
-    	            	
-    	            
-    	            if(data.result == '1'){
-    	            delText.text("삭제된 댓글입니다.");
-    	            }else{
-    	            	console.log("실패했쪙");
-    	            }
-    	            	
-    	            }
-    	         });    
-    	      
+       var del = $(this).parent().attr('value');
+       console.log(del);
+       
+       var delText = $(this).next().next();
+             $.ajax({
+                   type:"POST",
+                   headers : {
+                      "Accept" : "application/json",
+                      "Content-Type" : "application/json"
+                   },
+                   data: JSON.stringify({
+                      commNo : del    
+                   }),
+                   
+                   url:"/reply/jsonDeleteReply",
+                   dataType:"json",
+                   success:function(data){
+                      
+                   
+                   if(data.result == '1'){
+                   delText.text("삭제된 댓글입니다.");
+                   }else{
+                      console.log("실패했쪙");
+                   }
+                      
+                   }
+                });    
+             
     } else {
        //no
     }
-	
-	
-	});
-	
-	
-	
-	
+   
+   
+   });
+   
+   
+   
+   
 ////////////////////////댓글의 댓글//////////////////////////
 $(document).on("click", "#pencil" , function() {
    $(this).parent().parent().parent().parent().parent().children("#wtext").children(".texteditor").hide();
@@ -425,45 +489,45 @@ $(document).on("click", "#commcreate", function(){
 });
 
 $(document).on("click", "#child-trash", function(){
-	
-	var result = confirm('정말로 삭제 하시겠습니까?');
+   
+   var result = confirm('정말로 삭제 하시겠습니까?');
 
     if(result) {
        //yes
-    	var del = $(this).parent().attr('value');
-    	console.log(del);
-    	
-    	var delText = $(this).next().next();
-    	      $.ajax({
-    	            type:"POST",
-    	            headers : {
-    	               "Accept" : "application/json",
-    	               "Content-Type" : "application/json"
-    	            },
-    	            data: JSON.stringify({
-    	               commNo : del    
-    	            }),
-    	            
-    	            url:"/reply/jsonDeleteReply",
-    	            dataType:"json",
-    	            success:function(data){
-    	            	
-    	            
-    	            if(data.result == '1'){
-    	            delText.text("삭제된 댓글입니다.");
-    	            }else{
-    	            	console.log("실패했쪙");
-    	            }
-    	            	
-    	            }
-    	         });    
-    	      
+       var del = $(this).parent().attr('value');
+       console.log(del);
+       
+       var delText = $(this).next().next();
+             $.ajax({
+                   type:"POST",
+                   headers : {
+                      "Accept" : "application/json",
+                      "Content-Type" : "application/json"
+                   },
+                   data: JSON.stringify({
+                      commNo : del    
+                   }),
+                   
+                   url:"/reply/jsonDeleteReply",
+                   dataType:"json",
+                   success:function(data){
+                      
+                   
+                   if(data.result == '1'){
+                   delText.text("삭제된 댓글입니다.");
+                   }else{
+                      console.log("실패했쪙");
+                   }
+                      
+                   }
+                });    
+             
     } else {
        //no
     }
-	
-	
-	});
+   
+   
+   });
 
 
 
@@ -545,71 +609,71 @@ $(document).on("click", "#commcreate2", function(){
 
 
 $(document).on("click", "#child-child-trash", function(){
-	
-	var result = confirm('정말로 삭제 하시겠습니까?');
+   
+   var result = confirm('정말로 삭제 하시겠습니까?');
 
     if(result) {
        //yes
-    	var del = $(this).parent().attr('value');
-    	console.log(del);
-    	
-    	var delText = $(this).next().next();
-    	      $.ajax({
-    	            type:"POST",
-    	            headers : {
-    	               "Accept" : "application/json",
-    	               "Content-Type" : "application/json"
-    	            },
-    	            data: JSON.stringify({
-    	               commNo : del    
-    	            }),
-    	            
-    	            url:"/reply/jsonDeleteReply",
-    	            dataType:"json",
-    	            success:function(data){
-    	            	
-    	            
-    	            if(data.result == '1'){
-    	            delText.text("삭제된 댓글입니다.");
-    	            }else{
-    	            	console.log("실패했쪙");
-    	            }
-    	            	
-    	            }
-    	         });    
-    	      
+       var del = $(this).parent().attr('value');
+       console.log(del);
+       
+       var delText = $(this).next().next();
+             $.ajax({
+                   type:"POST",
+                   headers : {
+                      "Accept" : "application/json",
+                      "Content-Type" : "application/json"
+                   },
+                   data: JSON.stringify({
+                      commNo : del    
+                   }),
+                   
+                   url:"/reply/jsonDeleteReply",
+                   dataType:"json",
+                   success:function(data){
+                      
+                   
+                   if(data.result == '1'){
+                   delText.text("삭제된 댓글입니다.");
+                   }else{
+                      console.log("실패했쪙");
+                   }
+                      
+                   }
+                });    
+             
     } else {
        //no
     }
-	
-	
-	});
+   
+   
+   });
 
 
 
 
 $(document).on("click",".col-md-4", function(){
 
-	$(this).next().find('#create').click(function(){
-		
-		$(this).parents('.modal').prev().attr("role","false"); 
-	});
-	
-	$(this).next().find('#commcreate').click(function(){
-		
-		$(this).parents('.modal').prev().attr("role","false"); 
-	});
-	
-	$(this).next().find('#commcreate2').click(function(){
-		
-		$(this).parents('.modal').prev().attr("role","false"); 
-	});
-	
+   $(this).next().find('#create').click(function(){
+      
+      $(this).parents('.modal').prev().attr("role","false"); 
+   });
+   
+   $(this).next().find('#commcreate').click(function(){
+      
+      $(this).parents('.modal').prev().attr("role","false"); 
+   });
+   
+   $(this).next().find('#commcreate2').click(function(){
+      
+      $(this).parents('.modal').prev().attr("role","false"); 
+   });
+   
    
     if($(this).attr('role')== 'true'){
       
-	  //$(this).next().children().children().children(".modal-footer").children("#footerscroll").children.remove();
-	   
+     //$(this).next().children().children().children(".modal-footer").children("#footerscroll").children.remove();
+      
       var tttt = $(this).children();
       console.log("내가 선택한 것만");
       console.log(tttt);
@@ -632,7 +696,9 @@ $(document).on("click",".col-md-4", function(){
          url:"/reply/jsonListReply",
          dataType:"json",
          success:function(data){
-            console.log(data.list);
+        	 
+           $("."+importtext+" > .first-reply").remove(); 
+          
            for(var i = 0; i < data.list.length; i++){
               console.log(data.list[i].repLevel);
               if(data.list[i].repLevel == 1){
@@ -644,7 +710,7 @@ $(document).on("click",".col-md-4", function(){
                     div = template(data.list[i]);
                     $(div).appendTo("."+importtext).fadeOut().fadeIn();
                     //$(div).appendTo("#"+data.list[i].commNo).fadeOut().fadeIn();
-                    $(tttt).attr("class","false");
+                    //$(tttt).attr("class","false");
               }else if(data.list[i].repLevel == 2){
                  console.log(im.children().attr("class"));
                  var test;
@@ -675,224 +741,222 @@ $(document).on("click",".col-md-4", function(){
 });
 
 $(document).on("click",".col-md-4", function(){
-	console.log("짜증난다");
-	console.log($(this).children().attr("value"));
-	var traceNo = $(this).children().attr("value");
-	console.log(traceNo);
-	var replycount = $(this);
-	console.log(replycount);
-	getLikeState(traceNo);
-	
-	//댓글 갯수
-	 $.ajax({
-	      type:"POST",
-	        headers : {
-	           "Accept" : "application/json",
-	           "Content-Type" : "application/json"
-	        },
-	        data: JSON.stringify({
-	        	traceNo : traceNo
-	         }),
-	         url:"/reply/getReply",
-	         dataType:"json",
-	         success:function(data){
-	        	 if(data.replyList[0].replyTrace.traceLikes == 0){
-	        		 var importvalue = replycount.next().children().children().children(".like-body");
-		        	 importvalue.children(".fa").remove();
-	        		 $(importvalue).append("<i class='fa fa-comment' id='commentid'>"+data.replyCount+"</i>");
-	        		 TraceTotalLike(traceNo);
-	        	 }else{
-	        		 
-	        	 
-	        	 console.log(data.replyList);
-	        	 var importvalue = replycount.next().children().children().children(".like-body");
-	        	 importvalue.children(".fa").remove();
-	        	 $(importvalue).append("<i class='fa fa-comment' id='commentid'>"+data.replyCount+"</i>");
-	        	 $(importvalue).append("<i class='fa fa-heart' id='likesid'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
-	        	 console.log(data.replyList[0].replyTrace.traceLikes);
-	        	 }
-	        	 
-	        	 
-	        	 
-	         }
-	 });
-	 
-	 
+   console.log("짜증난다");
+   console.log($(this).children().attr("value"));
+   var traceNo = $(this).children().attr("value");
+   console.log(traceNo);
+   var replycount = $(this);
+   console.log(replycount);
+   getLikeState(traceNo);
+   
+   //댓글 갯수
+    $.ajax({
+         type:"POST",
+           headers : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+           },
+           data: JSON.stringify({
+              traceNo : traceNo
+            }),
+            url:"/reply/getReply",
+            dataType:"json",
+            success:function(data){
+               if(data.replyList[0].replyTrace.traceLikes == 0){
+                  var importvalue = replycount.next().children().children().children(".like-body");
+                  importvalue.children(".fa").remove();
+                  $(importvalue).append("<i class='fa fa-comment' id='commentid' style='float:right'>"+data.replyCount+"</i>");
+                  TraceTotalLike(traceNo);
+               }else{
+                  
+               
+               console.log(data.replyList);
+               var importvalue = replycount.next().children().children().children(".like-body");
+               importvalue.children(".fa").remove();
+               $(importvalue).append("<i class='fa fa-comment' id='commentid'style='float:right'>"+data.replyCount+"</i>");
+               $(importvalue).append("<i class='fa fa-heart' id='likesid' style='float:right'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
+               console.log(data.replyList[0].replyTrace.traceLikes);
+               }
+               
+               
+               
+            }
+    });
+    
+    
 });
 
 ////////////////////////////////좋아요 수 확인//////////////////////
 function TraceTotalLike(data){
-	$.ajax({
-	      type:"POST",
-	        async:false,
-	        headers : {
-	           "Accept" : "application/json",
-	           "Content-Type" : "application/json"
-	        },
-	        data: JSON.stringify({
-	        	traceNo : data
-	         }),
-	         url:"/trace/likeTotal",
-	         dataType:"json",
-	         success:function(data){
-	        	 console.log(data);
-	        	 $(".like-body").append("<i class='fa fa-heart' id='likesid'>"+data.liketotal.traceLikes+"</i>");
-	        	 
-	        	 
-	        	 
-	         }
-	 });
+   $.ajax({
+         type:"POST",
+           async:false,
+           headers : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+           },
+           data: JSON.stringify({
+              traceNo : data
+            }),
+            url:"/trace/likeTotal",
+            dataType:"json",
+            success:function(data){
+               console.log(data);
+               $(".like-body").append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.liketotal.traceLikes+"</i>");
+               
+               
+               
+            }
+    });
 }
 
 
 //////////////////////////사용자 별 좋아요 확인//////////////////////
 function getLikeState(data){
-	console.log("짜증나~~~~~~"+data);
-	$.ajax({
-		type:"POST",
-		headers : {
+   console.log("짜증나~~~~~~"+data);
+   $.ajax({
+      type:"POST",
+      headers : {
             "Accept" : "application/json",
             "Content-Type" : "application/json"
          },
-		url:"/like/getLikeState",
-		dataType:"json",
-		data: JSON.stringify({
-	        traceNo : data,
-	        id: keywordNos,
-	    }),
-		success : function(data){
-			console.log(data);
-			if(data.likeState[0].likeState == 1){
-				console.log("dddd");
-			$(".like-body").children(".w3-btn").remove();
-			$(".like-body").children(".fa fa-thumbs-o-up").remove();
-			$(".like-body").append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
-			
-			}else{
-				$(".like-body").children(".w3-btn").remove();
-				$(".like-body").children(".fa fa-thumbs-o-up").remove();
-			$(".like-body").append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
-			}
-		}
-	});
-	
+      url:"/like/getLikeState",
+      dataType:"json",
+      data: JSON.stringify({
+           traceNo : data,
+           id: keywordNos,
+       }),
+      success : function(data){
+         console.log(data);
+         if(data.likeState[0].likeState == 1){
+            console.log("dddd");
+         $(".like-body").children(".w3-btn").remove();
+         $(".like-body").children(".fa fa-thumbs-o-up").remove();
+         $(".like-body").append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
+         
+         }else{
+            $(".like-body").children(".w3-btn").remove();
+            $(".like-body").children(".fa fa-thumbs-o-up").remove();
+         $(".like-body").append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
+         }
+      }
+   });
+   
 }
 
 
 $(document).on("click", "#liketest", function(){
-	//console.log("들어왔다!!!! 씐난다!!!!");
-	console.log($(this).parent().find(".owl-carousel").attr("value"));
-	var traceNo = $(this).parent().find(".owl-carousel").attr("value");
-	var test = $(this).parent();
-	$.ajax({
-		type:"POST",
+   //console.log("들어왔다!!!! 씐난다!!!!");
+   console.log($(this).parent().find(".owl-carousel").attr("value"));
+   var traceNo = $(this).parent().find(".owl-carousel").attr("value");
+   var test = $(this).parent();
+   $.ajax({
+      type:"POST",
         async:false,
         headers : {
            "Accept" : "application/json",
            "Content-Type" : "application/json"
         },
         data: JSON.stringify({
-        	traceNo : traceNo
+           traceNo : traceNo
          }),
          url:"/trace/updateLikes",
          dataType:"json",
          success:function(data){
-        	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
-        		 LikeState(traceNo);
-        		 test.children("#likesid").remove();
-        		 test.children("#liketest").remove();
-        		 $(test).append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
-        		 $(test).append("<i class='fa fa-heart' id='likesid'>"+data.likes.traceLikes+"</i>");
-        		 
-        		 
-        	 }
+            if(data.result==1){
+               LikeState(traceNo);
+               test.children("#likesid").remove();
+               test.children("#liketest").remove();
+               $(test).append("<a target='_blank' class='w3-btn' id='unlike'>좋아요 취소<i class='fa fa-thumbs-o-down'></i></a>");
+               $(test).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.likes.traceLikes+"</i>");
+               
+               
+            }
          }
-	});
-	
+   });
+   
 });
 
 /////////////////////좋아요 insert//////////////////////
 function LikeState(data){
-	console.log(data);
-	console.log(keywordNos);
-	$.ajax({
-		type:"POST",
-		headers : {
+   console.log(data);
+   console.log(keywordNos);
+   $.ajax({
+      type:"POST",
+      headers : {
             "Accept" : "application/json",
             "Content-Type" : "application/json"
          },
-		url:"/like/addLikeState",
-		dataType:"json",
-		data: JSON.stringify({
-	        traceNo : data,
-	        id: keywordNos,
-	        likeState: 1
-	    }),
-		success : function(data){
-			if(data.result == "1"){
-				console.log("ddddd");
-			}
-		}
-	});
+      url:"/like/addLikeState",
+      dataType:"json",
+      data: JSON.stringify({
+           traceNo : data,
+           id: keywordNos,
+           likeState: 1
+       }),
+      success : function(data){
+         if(data.result == "1"){
+            console.log("ddddd");
+         }
+      }
+   });
 }
 
 $(document).on("click", "#unlike", function(){
-	console.log("들어왔다!!!! 씐난다!!!!");
-	console.log($(this).parent().find(".owl-carousel").attr("value"));
-	var traceNo = $(this).parent().find(".owl-carousel").attr("value");
-	var test = $(this).parent();
-	
-	updateLikeState(traceNo);
-	$.ajax({
-		type:"POST",
+   console.log("들어왔다!!!! 씐난다!!!!");
+   console.log($(this).parent().find(".owl-carousel").attr("value"));
+   var traceNo = $(this).parent().find(".owl-carousel").attr("value");
+   var test = $(this).parent();
+   
+   updateLikeState(traceNo);
+   $.ajax({
+      type:"POST",
         async:false,
         headers : {
            "Accept" : "application/json",
            "Content-Type" : "application/json"
         },
         data: JSON.stringify({
-        	traceNo : traceNo
+           traceNo : traceNo
          }),
          url:"/trace/updateunLikes",
          dataType:"json",
          success:function(data){
-        	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
-        		 test.children("#likesid").remove();
-        		 test.children("#liketest").remove();
-        		 test.children("#unlike").remove();
-        		 $(test).append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
-        		 $(test).append("<i class='fa fa-heart' id='likesid'>"+data.likes.traceLikes+"</i>");
-        		 
-        		 
-        	 }
+            if(data.result==1){
+               test.children("#likesid").remove();
+               test.children("#liketest").remove();
+               test.children("#unlike").remove();
+               $(test).append("<a target='_blank' class='w3-btn' id='liketest'>좋아요<i class='fa fa-thumbs-o-up'></i></a>");
+               $(test).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.likes.traceLikes+"</i>");
+               
+               
+            }
          }
-	});
+   });
 });
 
 /////////////////////좋아요 삭제//////////////////////
 function updateLikeState(data){
-	
-	$.ajax({
-		type:"POST",
-		headers : {
+   
+   $.ajax({
+      type:"POST",
+      headers : {
             "Accept" : "application/json",
             "Content-Type" : "application/json"
          },
-		url:"/like/updateLikeState",
-		dataType:"json",
-		data: JSON.stringify({
-	        traceNo : data,
-	        id: keywordNos
-	    }),
-		success : function(data){
-			if(data.upResult == 1){
-				console.log("성공");
-			}
-		}
-	});
-	
+      url:"/like/updateLikeState",
+      dataType:"json",
+      data: JSON.stringify({
+           traceNo : data,
+           id: keywordNos
+       }),
+      success : function(data){
+         if(data.upResult == 1){
+            console.log("성공");
+         }
+      }
+   });
+   
 }
 
 
@@ -922,22 +986,22 @@ $(function(){
 });
 
 /*$(function(){
-	 $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
-		 //console.log(data.alramcount);
-		 console.log(data.alramlist);
-		 var listsize = data.alramlist.length;
-		 $("#arlam").append(listsize);
-		 
-		var div;
+    $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
+       //console.log(data.alramcount);
+       console.log(data.alramlist);
+       var listsize = data.alramlist.length;
+       $("#arlam").append(listsize);
+       
+      var div;
     var templateSource = $("#alramTemplate").html();
     var template = Handlebars.compile(templateSource);
     div = template(data);
     console.log(div);
     
     $("#alram").append(div);
-		 
-	 });
-	
+       
+    });
+   
 });*/
 
 ////////////////////////////////////////친구 상단바 알림//////////////////////////////////////
@@ -1004,7 +1068,7 @@ data: JSON.stringify
 ({
 
 friendMemberId : agId,
-friendId : keywordNos       	   
+friendId : keywordNos             
 
 }),
 url:"/friend/agreeFriend",
@@ -1035,7 +1099,7 @@ data: JSON.stringify
 ({
 
 friendMemberId : disAgId,
-friendId : keywordNos       	   
+friendId : keywordNos             
 
 }),
 url:"/friend/disAgreeFriend",
@@ -1050,11 +1114,11 @@ $("."+disAgRemove).remove();
 });
 });
 $(document).on("click", "#centereds", function(){
-	   console.log("첫걸음");
-	   location.href="updatemember.html";
-	});
+      console.log("첫걸음");
+      location.href="updatemember.html";
+   });
 
 
 
 
-	
+   

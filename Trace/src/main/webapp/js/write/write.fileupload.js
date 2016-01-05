@@ -45,7 +45,7 @@ $(function() {
 					console.log(div);
 
 					$(div).appendTo("#kky");
-					$("#inputSuccess").text(data.list4[0].text);
+					$("#inputSuccess").html(data.list4[0].text);
 					$("#addr").text(data.list4[0].addr);
 					
 					console.log(data.list4[0]);
@@ -265,7 +265,6 @@ $(document).on("click", "#update", function() {
               {     
                  if (responses && responses.length > 0) 
                  {        
-                     alert(responses[0].formatted_address);
                      $.jStorage.set("addr", responses[0].formatted_address);
                      console.log($.jStorage.get("addr"));
                      	if($("#addr").text()==null){

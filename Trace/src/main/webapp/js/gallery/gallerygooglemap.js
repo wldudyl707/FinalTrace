@@ -29,7 +29,7 @@ $(document).on("shown.bs.modal",".onClickMap",function(){
 			  		    center: latlng
 			  		  });
 			  	   
-			  	  var suIcon = new google.maps.MarkerImage("/images/maker2.png", null, null, null, new google.maps.Size(30,40));
+			  	  var suIcon = new google.maps.MarkerImage("/images/markers.png", null, null, null, new google.maps.Size(100,100));
 			   	  var marker = new google.maps.Marker({
 			   	  map: map,
 			   	  animation: google.maps.Animation.DROP,

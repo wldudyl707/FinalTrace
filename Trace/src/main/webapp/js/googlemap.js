@@ -130,14 +130,15 @@ function moveToPlace(){
  	       			var imgName = [];
  	       			imgName = stoImgName.split(",");
  	       			var imgTag='';
+ 	       			var imgCount = imgName.length - 1;
  	       	     	if(imgName.length == 1){
- 	       				imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' class='replycount'></div>";
+ 	       				imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger "+traceNo+"' name='"+imgCount+"' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' class='replycount'></div>";
  	       			}
  	       	     	
  	       	     	else if(imgName.length >= 2){
  	       	     		
- 	       				imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);' class='replycount'></div>";
- 	       				imgTag += "<div class='count' style='position:absolute; top:15px; right:130%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>";
+ 	       				imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger "+traceNo+"' name='"+imgCount+"' data-toggle='modal' data-target='#myModal"+traceNo+"' value='"+traceNo+"' role='true'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"' class='replycount'></div>";
+ 	       				//imgTag += "<div class='count' style='position:absolute;top: 40px;right: 135%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>";
  	       	     	
  	       	     	}
  	       			
@@ -196,7 +197,7 @@ function moveToPlace(){
              	     itemsDesktopSmall : [979,3],*/
              	      
              	    navigation:false,
-             	    pagination:false
+             	    pagination:true
              	  });
                
                $(document).on("click",".item",function() {
@@ -213,6 +214,34 @@ function moveToPlace(){
             	   });
 
             	   });
+               
+               $(document).on("mouseenter",".item",function() {
+            		$(this).attr("style","-webkit-filter:grayscale(70%);-moz-filter: grayscale(70%);-ms-filter: grayscale(70%);-o-filter: grayscale(70%);filter: grayscale(70%);");
+            		
+            		var ch = $(this).attr("name");
+            		
+            		if($(this).attr("name") == 1){
+            			
+            			$(this).children().after("<div class='count' style='position:absolute; top:66%; right:1%; font-size:350%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+            		}
+            		
+            		else if($(this).attr("name") > 1){
+            			
+            			$(this).children().after("<div class='count' style='position:absolute; top:66%; right:1%; font-size:350%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+            		}
+            		
+            		
+            	});
+
+            	$(document).on("mouseleave",".item",function() {
+            		$(this).attr("style","none");
+            		$(this).find(".count").remove();
+            	});
+
+            	$(document).on("click",".item",function() {
+            		$(this).attr("style","none");
+            		$(this).find(".count").remove();
+            	});
               
               
               var divs;
@@ -221,6 +250,8 @@ function moveToPlace(){
               divs = template(data);
               $("#members").children().remove();  
               $("#members").append(divs).hide().show( "slide", {direction: "left" }, 1000 );
+              $(".memberTable").children("#memberTable").remove();
+              $(".memberTable").prepend("<h3 id='memberTable'>TEAM MEMBERS</h3>");
               
               console.log("ss"+$.jStorage.get("latitude"));
               console.log("dd"+$.jStorage.get("longtitude"));
@@ -233,6 +264,12 @@ function moveToPlace(){
                    console.log("내이름 : "+keywordNos);
                    $("#"+keywordNos).remove();
                   }
+                  
+                  if(data.list[i].member.memberId == keywordNos){
+                      console.log("내이름 : "+keywordNos);
+                      $("#gallery"+keywordNos).remove();
+                   }
+                  
                   ////////////////////////////////////////////////////////////////////////////////////////////////
                   if((data.list[i].friend.friendId == keywordNos) && ((data.list[i].friend.friendState) == 1)){
                    console.log("프렌트리스트왔나요1 :"+(data.list[i].friend.friendMemberId));
@@ -271,7 +308,7 @@ function moveToPlace(){
               var latlng = new google.maps.LatLng(la, lo);
 
 
-           map.setCenter(latlng);
+          /* map.setCenter(latlng);*/
            var suIcon = new google.maps.MarkerImage("/images/markers.png", null, null, null, new google.maps.Size(100,100));
            var marker = new google.maps.Marker({
             map: map,
@@ -617,6 +654,7 @@ $(document).on("click",".details",function(){
        $("#owl-demo").remove();
        $(".memberTable").after("<div id='owl-demo' style='position: absolute;' class='owl-ca'></div>");
        /*moveToselect(data);*/
+       var i=0;
        Handlebars.registerHelper('imgTagBottom', function(stoImgName, traceNo) {
    			console.log("스토어이미지네임찍히는것인가?");
    			console.log(stoImgName);
@@ -624,27 +662,43 @@ $(document).on("click",".details",function(){
    			var imgName = [];
    			imgName = stoImgName.split(",");
    			var imgTag='';
-   	     	for(var i=0 ; i<imgName.length ; i++){
-   	     		imgTag += "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-modal='#modal"+traceNo+"'><img src='trace_thumb/"+imgName[i]+"' alt='Owl Image' value='"+traceNo+"'></div>";
-   	     	}
+   			
+   			imgTag = "<div class='item mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored modal__trigger' data-toggle='modal' data-target='#myModalBottom"+i+"' value='"+traceNo+"' id='"+i+"'><img src='trace_thumb/"+imgName[0]+"' alt='Owl Image' value='"+traceNo+"'></div>";
+   			i++;
    			
    			return imgTag;
    			
    		});
        
+       Handlebars.registerHelper('carouselImgBottom', function(stoImgName) {
+  		 console.log("캐러셀");
+  		 console.log(stoImgName);
+  		 var carouselName = [];
+  		 carouselName = stoImgName.split(",");
+  		 var carouselTag='';
+  		 console.log(carouselName.length)
+  		 for(var i=0 ; i < carouselName.length ; i++){
+  		 	carouselTag += "<div class='item active modalItem'>"+
+  		 					"<img src='trace_thumb/"+carouselName[i]+"' width='100%' height='400' class='carousel-img'>"+
+  		 					"</div>";
+  		 }
+
+  		 return carouselTag;
+
+  		 });  
+       
        var div;
        var templateSource = $("#boardTrTemplateBottom").html();
        var template = Handlebars.compile(templateSource);
        div = template(data);
-        
        $("#owl-demo").append(div);
        
-       //var owl = $("#owl-demo")
-       /*var owlBottom = owl.parents(".wrapper").find(".owl-carousel").attr("id");
-       console.log($(this))
-       console.log("sfsf"+owlBottom);*/
-   	  //$("#"+owlBottom)
-       //var owlBottom = $(".owl-ca");
+       var modal;
+       var templateSource = $("#boardTrTemplateModal2").html();
+       var template = Handlebars.compile(templateSource);
+       modal = template(data); 
+       $("#owl-demo").after(modal);
+       
        $("#owl-demo").owlCarousel({
    	     
    		 items : 9,
@@ -654,6 +708,21 @@ $(document).on("click",".details",function(){
    	    navigation:false,
    	    pagination:false
    	  });
+       
+       $(document).on("click",".item",function() {
+	   		console.log("바텀모달");
+	   		
+	   var data = $(this).attr("id");
+	   console.log(data);
+	   var owl = $(this).parents("#main-content").find("#myModalBottom"+data).find(".owl-carousel");
+	   console.log(owl);
+	   owl.owlCarousel({
+	     navigation : true,
+	     singleItem : true,
+	     transitionStyle : "backSlide"
+	   });
+
+	   });
       
       
       var latlng = new google.maps.LatLng(data.list[0].latitude, data.list[0].longtitude);
@@ -793,7 +862,6 @@ $(this).prev().prev("#footerscroll").animate({scrollTop:pos},'slow');
             url:"/reply/jsonAddReply",
             dataType:"json",
             success:function(data){
-               alert("왔다");
                console.log(data);
                var div;
                var templateSource = $("#replyTemplate").html();
@@ -1116,17 +1184,17 @@ $(document).on("click",".item", function(){
 
 	$(this).parents("#main-content").find("#myModal"+data).find("#create").click(function(){
 		
-		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+		$(this).parents('#main-content').find("#owl-demo").find("."+data).attr("role","false"); 
 	});
 	
 	$(this).parents("#main-content").find("#myModal"+data).find("#commcreate").click(function(){
 		
-		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+		$(this).parents('#main-content').find("#owl-demo").find("."+data).attr("role","false"); 
 	});
 	
 	$(this).parents("#main-content").find("#myModal"+data).find("#commcreate2").click(function(){
 		
-		$(this).parents('#main-content').find("#owl-demo").find(".item").attr("role","false"); 
+		$(this).parents('#main-content').find("#owl-demo").find("."+data).attr("role","false"); 
 	});
 	
    
@@ -1156,7 +1224,7 @@ $(document).on("click",".item", function(){
          url:"/reply/jsonListReply",
          dataType:"json",
          success:function(data){
-            console.log(data.list);
+        $("."+importtext+" > .first-reply").remove();
            for(var i = 0; i < data.list.length; i++){
               console.log(data.list[i].repLevel);
               if(data.list[i].repLevel == 1){

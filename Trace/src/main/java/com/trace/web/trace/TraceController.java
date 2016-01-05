@@ -92,7 +92,7 @@ public class TraceController {
 						new FileOutputStream(filePath + genId + extName));
 				
 				Thumbnails.of(new File(filePath+genId+extName))
-							.size(1000, 1000)
+							.size(500,500)
 							.toFiles(new File(thumbPath), Rename.NO_CHANGE);
 			}catch(IOException e){
 				e.printStackTrace();
@@ -118,7 +118,7 @@ public class TraceController {
 	@RequestMapping(value="listTrace")
 	public void listTrace(Model model, @RequestParam("memberId") String memberId) throws Exception{
 		System.out.println("/trace/listTrace");
-
+			System.out.println("@@@@@@@@@@@"+memberId);
 		Trace trace = new Trace();
 		trace.setTraceId(memberId);
 		/*trace.setTraceId("user01");*/

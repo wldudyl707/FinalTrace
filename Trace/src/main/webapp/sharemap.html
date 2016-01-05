@@ -115,11 +115,11 @@ margin-top : 1.5%;
 #owl-demo .item img{
   display: block;
   width: 100%;
-  height:100px;
+  height:160px;
 }
 
 #owl-demo{
-bottom:50px;
+bottom:0;
 }
 
 /* .img-circle {
@@ -144,6 +144,29 @@ bottom:50px;
     border-bottom: 1px solid #E5E5E5;
 }
 
+html,body{
+height: 100%;
+overflow: hidden;
+}
+
+#main-content{
+height: 100%;
+}
+
+.wrapper{
+height: 100%;
+}
+
+.col-lg-12{
+height: 100%;
+}
+
+h3, .h3 {
+    margin-top: 13%;
+    margin-right: 70px;
+    font-size: 30px;
+    font-weight: bolder;
+}
 
 </style>
 </head>
@@ -198,9 +221,6 @@ bottom:50px;
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
                     <li><a class="logout" id="myBtn">Logout</a></li>
-               </ul>
-                <ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="index.html">register</a></li>
                </ul>
             </div>
         </header>
@@ -265,7 +285,7 @@ bottom:50px;
                <!-- <div class="row"> -->
                        <!-- USERS ONLINE SECTION -->
            <div class="memberTable" style="position: absolute;right: 2%;height: 80%;">
-           <h3 id="memberTable">TEAM MEMBERS</h3>
+           
            <div id="members" class="members">
            </div>
            </div>
@@ -363,9 +383,41 @@ bottom:50px;
          {{#list}}{{#imgTagBottom stoImgName traceNo}}{{/imgTagBottom}}{{/list}}
        </script>
        
+       <script id="boardTrTemplateModal2" type="text/x-handlebars-template">
+         {{#list}}
+            <!-- Modal -->
+                <div class="modal fade"  id ="myModalBottom{{@key}}" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+              <div class="modal-content">
+      
+
+
+                <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="gridSystemModalLabel"><i class="fa fa-picture-o"></i></h4>
+              </div>
+        
+
+
+                 <div class="modal-body like-body">
+                <div class="container" style="width:100%;">
+  
+           <div id="owl-demo" class="owl-carousel owl-theme" value="{{traceNo}}">
+              {{#carouselImgBottom stoImgName traceNo}}{{/carouselImgBottom}}
+             </div>
+
+			</div>
+            </div>
+               
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+      {{/list}}
+       </script>
+       
          <script id="boardTrTemplate2" type="text/x-handlebars-template">
          {{#list}}
-      
+      				
                   <div class="desc">
                          <div class="thumb">
                             <img class="imgMember" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg" style="border-radius: 50%;">
@@ -380,7 +432,7 @@ bottom:50px;
                          </div>
                          <div class="buttons" id="{{friend.friendState}}" value="{{member.memberId}}">
                       <i class="fa fa-user-plus fa-lg {{member.memberId}}" id="{{member.memberId}}"></i>                           
-                            <i class="fa fa-picture-o fa-lg"></i>
+                            <i class="fa fa-picture-o fa-lg" id="gallery{{member.memberId}}"></i>
                   </div>
                       </div>
 
@@ -431,17 +483,17 @@ bottom:50px;
          {{/list}}
        </script>
        
-       <script id="replyTemplate" type="text/x-handlebars-template">
+<script id="replyTemplate" type="text/x-handlebars-template">
 {{#list}}
      <div class='first-reply'>
-         <div class='media'>
+         <div class='media' style='margin-bottom:1%;'>
             <div class='media-left'>
                <a href='#'>
-               <img class='media-object' src='img/seon111.jpg' alt='4545' width='45px' height='45px'>
+               <img class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'  style='border-radius: 50%;'>
                </a>
             </div>
             <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
             </div>
@@ -468,14 +520,14 @@ bottom:50px;
 <script id="replyTemplate02" type="text/x-handlebars-template">
 {{#list}}
 <div class='second-reply' style='margin-left:40px;'>
-   <div class='childmedia'>
+   <div class='childmedia' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
    </div>
@@ -504,14 +556,14 @@ bottom:50px;
 <script id="replyTemplate0202" type="text/x-handlebars-template">
 {{#list}}
 <div class='third-reply' style='margin-left:40px;'>
-   <div class='childmedia2'>
+   <div class='childmedia2' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='child-child-trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='child-child-trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
    </div>
@@ -523,14 +575,14 @@ bottom:50px;
 <script id="replyTemplate11" type="text/x-handlebars-template">
 
      <div class='first-reply' id='{{commNo}}'>
-         <div class='media'>
+         <div class='media' style='margin-bottom:1%;'>
             <div class='media-left'>
                <a href='#'>
-               <img class='media-object' src='img/seon111.jpg' alt='4545' width='45px' height='45px'>
+               <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
                </a>
             </div>
             <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='pencil' class="fa fa-pencil"></a><a id='trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
             </div>
@@ -542,14 +594,14 @@ bottom:50px;
 <script id="replyTemplate0222" type="text/x-handlebars-template">
 
 <div class='second-reply' id='{{commNo}}' style='margin-left:40px;'>
-   <div class='childmedia'>
+   <div class='childmedia' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='child-pencil' class="fa fa-pencil"></a><a id='child-trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
    </div>
@@ -561,14 +613,14 @@ bottom:50px;
 <script id="replyTemplate0303" type="text/x-handlebars-template">
 
 <div class='third-reply' id='{{commNo}}'style='margin-left:40px;'>
-   <div class='childmedia2'>
+   <div class='childmedia2' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img class='media-object' src="traceupload/{{oriImgName}}"' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
-         <a id='userId'>{{id}}</a><a id='child-child-pencil' class="fa fa-pencil"></a><a id='child-child-trash' class="fa fa-trash"></a>
+			<a id='userId'>{{id}}</a><a id='child-child-pencil' class="fa fa-pencil"></a><a id='child-child-trash' class="fa fa-trash"></a>
             <p1 class='media-heading'></p1>
             <p2 id='temp'>{{{comm}}}</p2>
    </div>

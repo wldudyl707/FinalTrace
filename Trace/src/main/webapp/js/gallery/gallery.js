@@ -37,21 +37,24 @@ console.log(traceNo);
 var imgName = [];
 imgName = stoImgName.split(",");
 var imgTag='';
+var imgCount = imgName.length - 1;
+var imgCount2 = imgName.length - 3;
 if(imgName.length == 1){
-	imgTag = "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='350' id='share-img'>";
+	imgTag = "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount+"' value='"+traceNo+"' width='100%' height='350' id='share-img'>";
 }
 
 else if(imgName.length == 2){
-	for(var i=0 ; i<imgName.length ; i++){
-	imgTag += "<img src='trace_thumb/"+imgName[i]+"' value='"+traceNo+"' width='100%' height='175' id='share-img'>";
-	}
+
+	imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount+"' value='"+traceNo+"' width='100%' height='350' id='share-img' " +
+	"style='-webkit-filter:grayscale(50%);-moz-filter: grayscale(50%);-ms-filter: grayscale(50%);-o-filter: grayscale(50%);filter: grayscale(50%);'>";
+	//imgTag += "<div class='count' style='position:absolute; top:73%; right:7%; font-size:413%; font-weight:bolder; color:white;'>+"+(imgName.length-1)+"</div>"
 }
 
 else if(imgName.length == 3){
 	
-	imgTag += "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='220' id='share-img'>";
+	imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount2+"' value='"+traceNo+"' width='100%' height='220' id='share-img' style='margin-bottom: -4px;'>";
 	for(var i=1 ; i<3 ; i++){
-		imgTag += "<img src='trace_thumb/"+imgName[i]+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
+		imgTag += "<img src='trace_thumb/"+imgName[i]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
 		
 	}
 	//imgTag += "<div class='count' style='position:absolute; top:57%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+6</div>"
@@ -59,14 +62,13 @@ else if(imgName.length == 3){
 
 else if(imgName.length > 3){
 	
-	imgTag += "<img src='trace_thumb/"+imgName[0]+"' value='"+traceNo+"' width='100%' height='220' id='share-img'>";
+	imgTag += "<img src='trace_thumb/"+imgName[0]+"' name='"+imgCount2+"' value='"+traceNo+"' width='100%' height='220' id='share-img' style='margin-bottom: -4px;'>";
 	
-	imgTag += "<img src='trace_thumb/"+imgName[1]+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
+	imgTag += "<img src='trace_thumb/"+imgName[1]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
 	
-	imgTag += "<img src='trace_thumb/"+imgName[2]+"' value='"+traceNo+"' width='50%' height='130' id='share-img' " +
-				"style='-webkit-filter:grayscale(100%);-moz-filter: grayscale(100%);-ms-filter: grayscale(100%);-o-filter: grayscale(100%);filter: grayscale(100%);'>";
+	imgTag += "<img src='trace_thumb/"+imgName[2]+"' name='"+imgCount2+"' value='"+traceNo+"' width='50%' height='130' id='share-img'>";
 
-	imgTag += "<div class='count' style='position:absolute; top:66%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-3)+"</div>"
+	//imgTag += "<div class='count' style='position:absolute; top:66%; right:22%; font-size:300%; font-weight:bolder; color:white;'>+"+(imgName.length-3)+"</div>"
 }
 
 return imgTag;
@@ -134,6 +136,35 @@ owl.owlCarousel({
 });
 
 });
+
+$(document).on("mouseenter",".col-md-4",function() {
+	$(this).attr("style","-webkit-filter:grayscale(70%);-moz-filter: grayscale(70%);-ms-filter: grayscale(70%);-o-filter: grayscale(70%);filter: grayscale(70%);");
+	
+	var ch = $(this).children().first().attr("name");
+	
+	if($(this).children().attr("name") == 1){
+		
+		$(this).children().last().after("<div class='count' style='position:absolute; top:70%; right:7%; font-size:500%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+	}
+	
+	else if($(this).children("img").attr("name") > 1){
+		
+		$(this).children("img").after("<div class='count' style='position:absolute; top:70%; right:7%; font-size:500%; font-weight:bolder; color:white;'>+"+ch+"</div>");
+	}
+	
+	
+});
+
+$(document).on("mouseleave",".col-md-4",function() {
+	$(this).attr("style","none");
+	$(this).find(".count").remove();
+});
+
+$(document).on("click",".col-md-4",function() {
+	$(this).attr("style","none");
+	$(this).find(".count").remove();
+});
+
 });
 });
 
@@ -190,7 +221,7 @@ owl.owlCarousel({
             dataType:"json",
             success:function(data){
                $.getJSON('/trace/listTrace2',{memberId : keywordNos }, function(obj){
-                 alert("왔다");
+                // alert("왔다");
                  console.log(data);
                  var div;
                  var templateSource = $("#boardTrTemplate3").html();
@@ -200,8 +231,8 @@ owl.owlCarousel({
                   console.log(div);
                   $("#addTr").empty();
                  
-                  /*$(div).appendTo("#addTr2");*/
-                  $("#addTr").append(div).hide().show( "slide", {direction: "left" }, 1000 );
+                  $(div).appendTo("#addTr");
+                  //$("#addTr").append(div).hide().show( "slide", {direction: "left" }, 1000 );
 
                   });
                }
@@ -276,8 +307,6 @@ $(this).prev().prev("#footerscroll").animate({scrollTop:pos},'slow');
             url:"/reply/jsonAddReply",
             dataType:"json",
             success:function(data){
-               alert("왔다");
-               console.log(data);
                var div;
                var templateSource = $("#replyTemplate").html();
                var template = Handlebars.compile(templateSource);
@@ -307,7 +336,6 @@ $(document).on("click", "#trash", function(){
     if(result) {
        //yes
     	var del = $(this).parent().attr('value');
-    	console.log(del);
     	
     	var delText = $(this).next().next();
     	      $.ajax({
@@ -404,8 +432,6 @@ $(document).on("click", "#commcreate", function(){
           url:"/reply/jsonAddReply",
           dataType:"json",
           success:function(data){
-             console.log("왔어욤");
-             console.log(data);
            var test;
               var templateSource = $("#replyTemplate02").html();
               var template = Handlebars.compile(templateSource);
@@ -523,8 +549,6 @@ $(document).on("click", "#commcreate2", function(){
           url:"/reply/jsonAddReply",
           dataType:"json",
           success:function(data){
-             console.log("왔어욤");
-             console.log(data);
            var test;
               var templateSource = $("#replyTemplate0202").html();
               var template = Handlebars.compile(templateSource);
@@ -611,14 +635,11 @@ $(document).on("click",".col-md-4", function(){
 	  //$(this).next().children().children().children(".modal-footer").children("#footerscroll").children.remove();
 	   
       var tttt = $(this).children();
-      console.log("내가 선택한 것만");
-      console.log(tttt);
-      console.log($(this).attr('value'));
-      console.log($(this).next().children().children().children(".modal-footer").attr("class"));
       var traceNo = $(this).attr('value');
       var importtext = $(this).next().children().children().children(".modal-footer").children("#footerscroll").attr("class");
       var im = $(this).next().children().children().children(".modal-footer").children("#footerscroll");
-      console.log($(this).next().children().children().children(".modal-footer").children("#footerscroll"));
+    
+
    $.ajax({
       type:"POST",
         async:false,
@@ -632,40 +653,36 @@ $(document).on("click",".col-md-4", function(){
          url:"/reply/jsonListReply",
          dataType:"json",
          success:function(data){
-            console.log(data.list);
+           $("."+importtext+" > .first-reply").remove();
            for(var i = 0; i < data.list.length; i++){
-              console.log(data.list[i].repLevel);
               if(data.list[i].repLevel == 1){
-                 console.log("data");
                  var div;
                     var templateSource = $("#replyTemplate11").html();
                     var template = Handlebars.compile(templateSource);
-                    console.log(template);
                     div = template(data.list[i]);
+                   
                     $(div).appendTo("."+importtext).fadeOut().fadeIn();
                     //$(div).appendTo("#"+data.list[i].commNo).fadeOut().fadeIn();
-                    $(tttt).attr("class","false");
+                    //$(tttt).attr("class","false");
               }else if(data.list[i].repLevel == 2){
-                 console.log(im.children().attr("class"));
                  var test;
                     var templateSource = $("#replyTemplate0222").html();
                     var template = Handlebars.compile(templateSource);
                     
-                    test = template(data.list[i]);        
+                    test = template(data.list[i]);    
+  
                     //data.list[i].repNo
                     //var abc = data.list[i].repNo;
                     //console.log(abc);
                     $(test).appendTo(im.children("#"+data.list[i].repNo)).fadeOut().fadeIn();
                     
               }else if(data.list[i].repLevel ==3){
-                 console.log(im.children('.second-reply').attr("class"));
                  
                  var test;
                     var templateSource = $("#replyTemplate0303").html();
                     var template = Handlebars.compile(templateSource);
                     
                     test = template(data.list[i]);
-                    //$(test).appendTo(im.children()).fadeOut().fadeIn();
                     $(test).appendTo(im.children(".first-reply").children("#"+data.list[i].repNo)).fadeOut().fadeIn();
               }
            }
@@ -675,12 +692,9 @@ $(document).on("click",".col-md-4", function(){
 });
 
 $(document).on("click",".col-md-4", function(){
-	console.log("짜증난다");
-	console.log($(this).children().attr("value"));
 	var traceNo = $(this).children().attr("value");
 	console.log(traceNo);
 	var replycount = $(this);
-	console.log(replycount);
 	getLikeState(traceNo);
 	
 	//댓글 갯수
@@ -704,12 +718,12 @@ $(document).on("click",".col-md-4", function(){
 	        	 }else{
 	        		 
 	        	 
-	        	 console.log(data.replyList);
+	        
 	        	 var importvalue = replycount.next().children().children().children(".like-body");
 	        	 importvalue.children(".fa").remove();
 	        	 $(importvalue).append("<i class='fa fa-comment' id='commentid'style='float:right'>"+data.replyCount+"</i>");
 	        	 $(importvalue).append("<i class='fa fa-heart' id='likesid'style='float:right'>"+data.replyList[0].replyTrace.traceLikes+"</i>");
-	        	 console.log(data.replyList[0].replyTrace.traceLikes);
+	        	
 	        	 }
 	        	 
 	        	 
@@ -798,7 +812,6 @@ $(document).on("click", "#liketest", function(){
          dataType:"json",
          success:function(data){
         	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
         		 LikeState(traceNo);
         		 test.children("#likesid").remove();
         		 test.children("#liketest").remove();
@@ -858,7 +871,6 @@ $(document).on("click", "#unlike", function(){
          dataType:"json",
          success:function(data){
         	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
         		 test.children("#likesid").remove();
         		 test.children("#liketest").remove();
         		 test.children("#unlike").remove();
