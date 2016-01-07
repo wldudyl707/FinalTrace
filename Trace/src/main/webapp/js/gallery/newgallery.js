@@ -203,7 +203,7 @@ $(document).on("mouseleave",".col-md-4",function() {
  $(function() {
     $(document).on("click","#reply", function() {
     //   location.href = 'newgallery.html';
-    	var id =$(location).attr('href').split("?")[1].split("=")[1];
+    	var id =$(location).attr('href').split("?")[1].split("=")[1].split("#")[0];
     	
     	 location.href="newgallery.html?memberId="+id ;
        
@@ -985,7 +985,7 @@ $(function(){
     });
 });
 
-/*$(function(){
+$(function(){
     $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
        //console.log(data.alramcount);
        console.log(data.alramlist);
@@ -1002,53 +1002,52 @@ $(function(){
        
     });
    
-});*/
+});
 
 ////////////////////////////////////////친구 상단바 알림//////////////////////////////////////
+$(function(){
+    $.ajax({
+        type:"POST",
+        async: false,
+        headers : 
+        {
+           "Accept" : "application/json",
+           "Content-Type" : "application/json"
+        },
+        data: JSON.stringify
+        ({
+          
+           //friendMemberId : keywordNos
+           friendId : keywordNos
+        }),
+        url:"/friend/listFriend",
+        dataType:"json",
+        success : function(data){
+           /*console.log(data.list[0].friendMember.stoImgName);*/
+          if(data.list.length > 0){
+           for(i=0 ; i<data.list.length ; i++){
+                if(data.list[0].friendState == 1){
+                   var div;
+                     var templateSource = $("#friendTemplate").html();
+                     var template = Handlebars.compile(templateSource);
+                     div = template(data);
+                     
+                     $("#friendList").append(data.listsize);
+                     
+                     /*console.log(div);*/
+                     
+                     $(".friend-header").after(div);
+                }else{
+                   $("#friendList").append("0");
+                }
+             }
+          }else{
+             $("#friendList").append("0");
+          }
 
-/*$(function(){
-$.ajax({
-type:"POST",
-async: false,
-headers : 
-{
-"Accept" : "application/json",
-"Content-Type" : "application/json"
-},
-data: JSON.stringify
-({
-
-//friendMemberId : keywordNos
-friendId : keywordNos
-}),
-url:"/friend/listFriend",
-dataType:"json",
-success : function(data){
-console.log(data.list[0].friendMember.stoImgName);
-if(data.list.length > 0){
-for(i=0 ; i<data.list.length ; i++){
-if(data.list[0].friendState == 1){
-var div;
-var templateSource = $("#friendTemplate").html();
-var template = Handlebars.compile(templateSource);
-div = template(data);
-
-$("#friendList").append(data.listsize);
-
-console.log(div);
-
-$(".friend-header").after(div);
-}else{
-$("#friendList").append("0");
-}
-}
-}else{
-$("#friendList").append("0");
-}
-
-}
-});
-});*/
+        }
+     });
+   });
 /////////////////////////////////수락////////////////////////////////////  
 
 $(document).on("click","#agree",function(){

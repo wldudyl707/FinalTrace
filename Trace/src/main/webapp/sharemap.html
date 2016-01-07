@@ -140,9 +140,7 @@ bottom:0;
     background: #555050;
 }
 
-.text {
-    border-bottom: 1px solid #E5E5E5;
-}
+
 
 html,body{
 height: 100%;
@@ -166,6 +164,17 @@ h3, .h3 {
     margin-right: 70px;
     font-size: 30px;
     font-weight: bolder;
+}
+
+img {
+    border: 0;
+    margin-top: -2%;
+    margin-right: -11%;
+}
+
+.modal-header {
+    background: #555050;
+    height: 59px;
 }
 
 </style>
@@ -196,7 +205,7 @@ h3, .h3 {
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
                             <li class="friend-header">
-                                <p class="green">You have 5 new messages</p>
+                                <p class="green"></p>
                             </li>
                         </ul>
                     </li>
@@ -342,7 +351,10 @@ h3, .h3 {
 
                 <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="gridSystemModalLabel"><i class="fa fa-picture-o"></i></h4>
+               <h4 class="modal-title" id="gridSystemModalLabel"><img class="imgMember" src="mem_upload/{{member.stoImgName}}" width="50px" height="50px" align="" id="memberImg" style="border-radius: 50%; float:left;"><p5 style="
+    margin-left: 10%;
+    left: 11%;
+">{{member.memberId}}</p5></h4>
               </div>
         
 
@@ -420,7 +432,7 @@ h3, .h3 {
       				
                   <div class="desc">
                          <div class="thumb">
-                            <img class="imgMember" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg" style="border-radius: 50%;">
+                            <img class="imgMember" src="mem_upload/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg" style="border-radius: 50%;">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
                          </div>
                          <div class="details">
@@ -442,20 +454,19 @@ h3, .h3 {
         <script id="alramTemplate" type="text/x-handlebars-template">
       {{#alramlist}}
                
-                  <li>
-                                <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{replyMember.stoImgName}}" id="photos"></span>
-                                    <span class="subject">
-                                    <span class="from">{{replyMember.memberId}}님이 회원님의 <br>댓글에 답글을 남겼습니다.</span>
-                                    </span>
+                  		<li>
+                            <a>
+                            <span class="photo"><img alt="avatar" src="mem_upload/{{replyMember.stoImgName}}" id="photos"></span>
+                            <span class="subject">
+                            <span class="from">{{replyMember.memberId}}님이 회원님의 <br>댓글에 답글을 남겼습니다.</span>
+                            </span>
                         
-                                    <span class="message">
-                                        {{comm}}
-                                    </span>
+                              <span class="message">
+                               {{comm}}
+                                </span>
                            <span class="time">{{commDate}}</span>
-                           
-                                </a>
-                            </li>
+                            </a>
+					  </li>
 
       {{/alramlist}}
       </script>
@@ -465,7 +476,7 @@ h3, .h3 {
       
                   <li class="agreeFriend">
                                 <a>
-                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{friendMember.stoImgName}}"></span>
+                                    <span class="photo"><img alt="avatar" src="mem_upload/{{friendMember.stoImgName}}"></span>
                                     <span class="subject">
                                     <span class="from">{{friendMemberId}}</span>
                            
@@ -489,7 +500,7 @@ h3, .h3 {
          <div class='media' style='margin-bottom:1%;'>
             <div class='media-left'>
                <a href='#'>
-               <img class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'  style='border-radius: 50%;'>
+               <img class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'  style='border-radius: 50%;'>
                </a>
             </div>
             <div class='media-body' value="{{commNo}}">
@@ -523,7 +534,7 @@ h3, .h3 {
    <div class='childmedia' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
@@ -559,7 +570,7 @@ h3, .h3 {
    <div class='childmedia2' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
@@ -578,7 +589,7 @@ h3, .h3 {
          <div class='media' style='margin-bottom:1%;'>
             <div class='media-left'>
                <a href='#'>
-               <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
+               <img style='border-radius: 50%;' class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
                </a>
             </div>
             <div class='media-body' value="{{commNo}}">
@@ -597,7 +608,7 @@ h3, .h3 {
    <div class='childmedia' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">
@@ -616,7 +627,7 @@ h3, .h3 {
    <div class='childmedia2' style='margin-bottom:1%;'>
        <div class='media-left'>
           <a href='#'>
-             <img style='border-radius: 50%;' class='media-object' src='mem_thumb/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
+             <img style='border-radius: 50%;' class='media-object' src='mem_upload/{{replyMember.stoImgName}}' alt='4545' width='45px' height='45px'>
           </a>
        </div>
           <div class='media-body' value="{{commNo}}">

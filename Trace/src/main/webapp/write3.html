@@ -51,7 +51,7 @@
 } */
         #share-img{
            box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2); 
-            border: 3px solid white;
+               border: 1px solid #C2C6C9;
         }
         
         #share-img:hover{
@@ -258,13 +258,13 @@
       <!--main content start-->
       <section id="main-content">
           <section class="wrapper">
-              
-              <h3><i class="fa fa-angle-right"></i>Write</h3>
+            
+              <h3>  <i class="fa fa-pencil-square-o"></i>&nbsp;Write</h3>
               <hr>
 
               <div class="row mt">
                    <div class="form-panel" style="border-radius:10px;">
-                       <h4 class="mb"><i class="fa fa-angle-right"></i> Image</h4>
+                       <h4 class="mb"> Image</h4>
                           <form class="form-horizontal tasi-form" method="get">
                               <div class="form-group has-success">
                                   <label class="col-sm-12 control-label col-lg-2" for="imageSuccess"></label>
@@ -279,7 +279,7 @@
               
                
                    <div class="form-panel">
-                       <h4 class="mb"><i class="fa fa-angle-right"></i>Messages</h4>
+                       <h4 class="mb">Messages</h4>
                           <form class="form-horizontal tasi-form" method="get">
                               <div class="form-group has-success">
                                   <label class="col-sm-12 control-label col-lg-2" for="inputSuccess"></label>
@@ -409,7 +409,7 @@
                
                   <li>
                                 <a href="index.html#">
-                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{replyMember.stoImgName}}" id="photos"></span>
+                                    <span class="photo"><img alt="avatar" src="mem_upload/{{replyMember.stoImgName}}" id="photos"></span>
                                     <span class="subject">
                                     <span class="from">{{replyMember.memberId}}님이 회원님의 <br>댓글에 답글을 남겼습니다.</span>
                                     </span>
@@ -430,7 +430,7 @@
       
                   <div class="desc">
                          <div class="thumb">
-                            <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
+                            <img class="img-circle" src="mem_upload/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
                          </div>
                          <div class="details">
@@ -454,7 +454,7 @@
       
                   <div class="desc">
                          <div class="thumb">
-                            <img class="img-circle" src="mem_thumb/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
+                            <img class="img-circle" src="mem_upload/{{member.stoImgName}}" width="35px" height="35px" align="" id="memberImg">
                             <!-- <br/><p>DIVYA MANIAN</p> -->
                          </div>
                          <div class="details">
@@ -478,7 +478,7 @@
       
                   <li class="agreeFriend">
                                 <a>
-                                    <span class="photo"><img alt="avatar" src="mem_thumb/{{friendMember.stoImgName}}"></span>
+                                    <span class="photo"><img alt="avatar" src="mem_upload/{{friendMember.stoImgName}}"></span>
                                     <span class="subject">
                                     <span class="from">{{friendMemberId}}</span>
                                     <span class="time" id="agree">수락</span>

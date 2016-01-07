@@ -9,7 +9,7 @@ function initialize() {
     }
          
    var mapProp = {
-      zoom:17,
+      zoom:15,
       disableDefaultUI:true,
       mapTypeId:google.maps.MapTypeId.ROADMAP
    }
@@ -102,6 +102,20 @@ function moveToPlace(){
     var maxLat = latitude + deltaLat;
     var minLong = longitude - deltaLong;
     var maxLong = longitude + deltaLong;
+    
+    if(minLong < 0 && maxLong < 0){
+        var temp;
+        temp = maxLong;
+        maxLong = minLong;
+        minLong = temp;
+     }
+    
+    if(minLat < 0 && maxLat < 0){
+        var temp;
+        temp = maxLat;
+        maxLat = minLat;
+        minLat = temp;
+     }
     
     console.log(minLat+', '+minLong+' / '+maxLat+', '+maxLong);
    
@@ -334,7 +348,7 @@ function moveToPlace(){
                          console.log(data);
                          console.log("난 뭐지"+data.list[0].stoImgName);
                          console.log(data.list[0].stoImgName);
-                         var contentString = '<img src="trace_thumb/'+data.list[0].stoImgName+ '" width="100%" height="100px">';
+                         var contentString = '<img src="trace_thumb/'+data.list[0].stoImgName+ '" width="100%" height="auto">';
                           infowindows.setContent(contentString);
                           infowindows.open(map, marker);
                         
@@ -401,7 +415,7 @@ function setMapOnAll(map) {
 $(function(){
        $.getJSON('/reply/alramReply',{ id : keywordNos }, function(data){
           //console.log(data.alramcount);
-          console.log(data.alramlist);
+          console.log(data);
           var listsize = data.alramlist.length;
           $("#arlam").append(listsize);
           
@@ -1384,7 +1398,7 @@ $(document).on("click", "#liketest", function(){
          dataType:"json",
          success:function(data){
         	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
+        		
         		 LikeState(traceNo);
         		 test.children("#likesid").remove();
         		 test.children("#liketest").remove();
@@ -1444,7 +1458,7 @@ $(document).on("click", "#unlike", function(){
          dataType:"json",
          success:function(data){
         	 if(data.result==1){
-        		 alert("업데이트 완료!!!");
+        		 
         		 test.children("#likesid").remove();
         		 test.children("#liketest").remove();
         		 test.children("#unlike").remove();

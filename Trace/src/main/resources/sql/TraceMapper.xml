@@ -100,7 +100,8 @@
 	   		    AND longtitude BETWEEN #{minLongitude} AND #{maxLongitude}) t
    		on m.id = t.id
    	 left outer join friend f
-   	    on m.id = f.id   	 	
+   	    on m.id = f.id
+   	order by t.trace_no   	 	
    </select>
    
     <select id="getTraceList2" parameterType="int" resultMap="traceSelectMap">
